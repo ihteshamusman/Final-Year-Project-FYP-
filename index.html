@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Integrated Alumni Analytics and Employability Prediction System - Monitor alumni careers and predict employability using ML/DL techniques">
+    <title>AlumniInsight | Analytics & Employability Prediction Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- ==================== AUTH LANDING PAGE ==================== -->
+    <div class="auth-page" id="authLanding">
+        <div class="auth-bg">
+            <div class="auth-particle" style="--x: 15%; --y: 20%; --size: 4px; --delay: 0s; --duration: 18s;"></div>
+            <div class="auth-particle" style="--x: 80%; --y: 30%; --size: 6px; --delay: 2s; --duration: 22s;"></div>
+            <div class="auth-particle" style="--x: 40%; --y: 70%; --size: 3px; --delay: 4s; --duration: 16s;"></div>
+            <div class="auth-particle" style="--x: 70%; --y: 80%; --size: 5px; --delay: 1s; --duration: 20s;"></div>
+            <div class="auth-particle" style="--x: 25%; --y: 50%; --size: 4px; --delay: 3s; --duration: 24s;"></div>
+            <div class="auth-particle" style="--x: 90%; --y: 15%; --size: 3px; --delay: 5s; --duration: 19s;"></div>
+            <div class="auth-particle" style="--x: 55%; --y: 40%; --size: 5px; --delay: 6s; --duration: 21s;"></div>
+            <div class="auth-particle" style="--x: 10%; --y: 85%; --size: 4px; --delay: 2.5s; --duration: 17s;"></div>
+        </div>
+        <div class="auth-container auth-container-wide">
+            <div class="auth-landing-card">
+                <div class="auth-logo">
+                    <div class="auth-logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h1>AlumniInsight</h1>
+                    <span>Integrated Analytics & Employability Platform</span>
+                </div>
+                <h2 class="auth-title">Welcome to AlumniInsight</h2>
+                <p class="auth-subtitle">Select your role to sign in</p>
+
+                <div class="role-cards">
+                    <div class="role-card" id="selectAdminRole">
+                        <div class="role-card-icon admin-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3>Administrator</h3>
+                        <p>Full system access — manage alumni records, analytics, and settings</p>
+                        <div class="role-card-footer">
+                            <span class="role-tag"><i class="fas fa-lock"></i> Secure Access</span>
+                        </div>
+                    </div>
+                    <div class="role-card" id="selectAlumniRole">
+                        <div class="role-card-icon alumni-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>Alumni</h3>
+                        <p>Update your profile, view insights, and track career progress</p>
+                        <div class="role-card-footer">
+                            <span class="role-tag"><i class="fas fa-id-card"></i> Verified Access</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-landing-note">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Alumni accounts are created by the administration. Contact your admin if you don't have an
+                        account.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ADMIN LOGIN PAGE ==================== -->
+    <div class="auth-page hidden" id="loginPage">
+        <div class="auth-bg">
+            <div class="auth-particle" style="--x: 15%; --y: 20%; --size: 4px; --delay: 0s; --duration: 18s;"></div>
+            <div class="auth-particle" style="--x: 80%; --y: 30%; --size: 6px; --delay: 2s; --duration: 22s;"></div>
+            <div class="auth-particle" style="--x: 40%; --y: 70%; --size: 3px; --delay: 4s; --duration: 16s;"></div>
+            <div class="auth-particle" style="--x: 70%; --y: 80%; --size: 5px; --delay: 1s; --duration: 20s;"></div>
+            <div class="auth-particle" style="--x: 25%; --y: 50%; --size: 4px; --delay: 3s; --duration: 24s;"></div>
+            <div class="auth-particle" style="--x: 90%; --y: 15%; --size: 3px; --delay: 5s; --duration: 19s;"></div>
+        </div>
+        <div class="auth-container">
+            <div class="auth-card" id="loginCard">
+                <button class="auth-back-btn" id="backToLandingFromAdmin">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <div class="auth-logo">
+                    <div class="auth-logo-icon admin-login-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h1>Admin Portal</h1>
+                    <span>AlumniInsight Administration</span>
+                </div>
+                <h2 class="auth-title">Admin Sign In</h2>
+                <p class="auth-subtitle">Enter your administrator credentials</p>
+
+                <div class="auth-alert hidden" id="loginAlert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="loginAlertText"></span>
+                </div>
+
+                <form id="loginForm" autocomplete="off">
+                    <input type="hidden" id="loginRole" value="admin">
+                    <div class="auth-form-group">
+                        <label for="loginEmail"><i class="fas fa-envelope"></i> Admin Email</label>
+                        <input type="email" id="loginEmail" class="auth-input" placeholder="admin@alumniinsight.edu"
+                            required autocomplete="email">
+                    </div>
+                    <div class="auth-form-group">
+                        <label for="loginPassword"><i class="fas fa-lock"></i> Password</label>
+                        <div class="auth-password-wrapper">
+                            <input type="password" id="loginPassword" class="auth-input"
+                                placeholder="Enter your password" required autocomplete="current-password">
+                            <button type="button" class="auth-toggle-password" id="toggleLoginPassword"
+                                aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="auth-options">
+                        <label class="auth-checkbox">
+                            <input type="checkbox" id="rememberMe">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                    </div>
+                    <button type="submit" class="auth-btn auth-btn-primary auth-btn-admin" id="loginBtn">
+                        <span class="auth-btn-text"><i class="fas fa-sign-in-alt"></i> Sign In as Admin</span>
+                        <div class="auth-btn-loader hidden" id="loginLoader">
+                            <div class="auth-spinner"></div>
+                        </div>
+                    </button>
+                </form>
+
+                <div class="auth-demo-credentials">
+                    <div class="demo-label"><i class="fas fa-info-circle"></i> Demo Credentials</div>
+                    <div class="demo-detail"><strong>Email:</strong> admin@alumniinsight.edu</div>
+                    <div class="demo-detail"><strong>Password:</strong> Admin@123</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ALUMNI LOGIN PAGE ==================== -->
+    <div class="auth-page hidden" id="alumniLoginPage">
+        <div class="auth-bg">
+            <div class="auth-particle" style="--x: 20%; --y: 25%; --size: 4px; --delay: 1s; --duration: 20s;"></div>
+            <div class="auth-particle" style="--x: 75%; --y: 35%; --size: 5px; --delay: 3s; --duration: 18s;"></div>
+            <div class="auth-particle" style="--x: 45%; --y: 65%; --size: 3px; --delay: 0s; --duration: 22s;"></div>
+            <div class="auth-particle" style="--x: 85%; --y: 75%; --size: 6px; --delay: 2s; --duration: 16s;"></div>
+            <div class="auth-particle" style="--x: 30%; --y: 45%; --size: 4px; --delay: 4s; --duration: 19s;"></div>
+            <div class="auth-particle" style="--x: 60%; --y: 20%; --size: 3px; --delay: 5s; --duration: 21s;"></div>
+        </div>
+        <div class="auth-container">
+            <div class="auth-card" id="alumniLoginCard">
+                <button class="auth-back-btn" id="backToLandingFromAlumni">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <div class="auth-logo">
+                    <div class="auth-logo-icon alumni-login-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h1>Alumni Portal</h1>
+                    <span>AlumniInsight Access</span>
+                </div>
+                <h2 class="auth-title">Alumni Sign In</h2>
+                <p class="auth-subtitle">Sign in with credentials provided by your administrator</p>
+
+                <div class="auth-alert hidden" id="alumniLoginAlert">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="alumniLoginAlertText"></span>
+                </div>
+
+                <form id="alumniLoginForm" autocomplete="off">
+                    <div class="auth-form-group">
+                        <label for="alumniLoginEmail"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="alumniLoginEmail" class="auth-input"
+                            placeholder="your.email@university.edu" required autocomplete="email">
+                    </div>
+                    <div class="auth-form-group">
+                        <label for="alumniLoginPassword"><i class="fas fa-lock"></i> Password</label>
+                        <div class="auth-password-wrapper">
+                            <input type="password" id="alumniLoginPassword" class="auth-input"
+                                placeholder="Enter your password" required autocomplete="current-password">
+                            <button type="button" class="auth-toggle-password" id="toggleAlumniLoginPassword"
+                                aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="auth-options">
+                        <label class="auth-checkbox">
+                            <input type="checkbox" id="alumniRememberMe">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                    </div>
+                    <button type="submit" class="auth-btn auth-btn-primary auth-btn-alumni" id="alumniLoginBtn">
+                        <span class="auth-btn-text"><i class="fas fa-sign-in-alt"></i> Sign In as Alumni</span>
+                        <div class="auth-btn-loader hidden" id="alumniLoginLoader">
+                            <div class="auth-spinner"></div>
+                        </div>
+                    </button>
+                </form>
+
+                <div class="auth-landing-note" style="margin-top: 20px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Don't have an account? Your account is created by the administration after graduation. Contact
+                        admin for access.</span>
+                </div>
+
+                <div class="auth-demo-credentials">
+                    <div class="demo-label"><i class="fas fa-info-circle"></i> Demo Alumni Login</div>
+                    <div class="demo-detail"><strong>Email:</strong> ahmed.k@university.edu</div>
+                    <div class="demo-detail"><strong>Password:</strong> Alumni@123</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== MAIN APPLICATION (hidden until login) ==================== -->
+    <div id="appContainer" class="hidden">
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>AlumniInsight</h1>
+                        <span>Analytics Platform</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+                    <i class="fas fa-angles-left"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-title">Main</span>
+                    <a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="alumni" id="nav-alumni">
+                        <i class="fas fa-users"></i>
+                        <span>Alumni Directory</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="predictor" id="nav-predictor">
+                        <i class="fas fa-brain"></i>
+                        <span>Employability Predictor</span>
+                        <span class="nav-badge">AI</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Analytics</span>
+                    <a href="#" class="nav-item" data-page="employment" id="nav-employment">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Employment Analytics</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="skills" id="nav-skills">
+                        <i class="fas fa-code"></i>
+                        <span>Skill Analytics</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="geographic" id="nav-geographic">
+                        <i class="fas fa-globe-asia"></i>
+                        <span>Geographic Map</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="trends" id="nav-trends">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Trend Analysis</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="jobmarket" id="nav-jobmarket">
+                        <i class="fas fa-satellite-dish"></i>
+                        <span>Job Market Intel</span>
+                        <span class="nav-badge" style="background:linear-gradient(135deg,#f43f5e,#fb7185)">Live</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Management</span>
+                    <a href="#" class="nav-item" data-page="programs" id="nav-programs">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Program Comparison</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="profile" id="nav-profile">
+                        <i class="fas fa-id-card"></i>
+                        <span>My Profile</span>
+                    </a>
+                    <a href="#" class="nav-item admin-only-nav" data-page="admin" id="nav-admin">
+                        <i class="fas fa-cog"></i>
+                        <span>Admin Panel</span>
+                        <span class="nav-badge admin-badge">Admin</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar" id="sidebarUserAvatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name" id="sidebarUserName">User</span>
+                        <span class="user-role" id="sidebarUserRole">Role</span>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn" title="Sign Out">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content" id="mainContent">
+            <!-- Top Header Bar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="breadcrumb">
+                        <span class="breadcrumb-icon"><i class="fas fa-home"></i></span>
+                        <span id="breadcrumbText">Dashboard</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search alumni, programs..." id="globalSearch">
+                    </div>
+                    <div class="notification-wrapper" id="notificationWrapper">
+                        <button class="header-btn" id="notificationBtn" aria-label="Notifications">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-dot" id="notificationDot"></span>
+                        </button>
+                        <div class="notification-dropdown hidden" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h4><i class="fas fa-bell"></i> Notifications</h4>
+                                <button class="notification-clear-btn" id="clearNotificationsBtn" title="Mark all as read">
+                                    <i class="fas fa-check-double"></i>
+                                </button>
+                            </div>
+                            <div class="notification-list" id="notificationList">
+                                <!-- Populated dynamically -->
+                            </div>
+                            <div class="notification-footer">
+                                <span id="notificationFooterText">No new notifications</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="header-btn theme-toggle" id="themeToggle" aria-label="Toggle Theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ==================== DASHBOARD PAGE ==================== -->
+            <section class="page active" id="page-dashboard">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Dashboard Overview</h2>
+                        <p class="page-subtitle">Real-time alumni analytics and employability insights</p>
+                    </div>
+                    <div class="page-actions">
+                        <select class="filter-select" id="dashboardYearFilter">
+                            <option value="all">All Years</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                        </select>
+                        <button class="btn btn-primary" id="exportDashboard">
+                            <i class="fas fa-download"></i> Export Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-gradient-1">
+                        <div class="kpi-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <span class="kpi-label">Total Alumni</span>
+                            <span class="kpi-value" data-count="4000">0</span>
+                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> 4,000 total alumni</span>
+                        </div>
+                        <div class="kpi-sparkline" id="sparkline1"></div>
+                    </div>
+
+                    <div class="kpi-card kpi-gradient-2">
+                        <div class="kpi-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <span class="kpi-label">Employment Rate</span>
+                            <span class="kpi-value">63.6<small>%</small></span>
+                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> 2,543 employed alumni</span>
+                        </div>
+                        <div class="kpi-sparkline" id="sparkline2"></div>
+                    </div>
+
+                    <div class="kpi-card kpi-gradient-3">
+                        <div class="kpi-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <span class="kpi-label">Avg. Time to Employment</span>
+                            <span class="kpi-value">6.5<small>months</small></span>
+                            <span class="kpi-change positive"><i class="fas fa-arrow-down"></i> Based on employed alumni</span>
+                        </div>
+                        <div class="kpi-sparkline" id="sparkline3"></div>
+                    </div>
+
+                    <div class="kpi-card kpi-gradient-4">
+                        <div class="kpi-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <span class="kpi-label">Partner Companies</span>
+                            <span class="kpi-value" data-count="100">0</span>
+                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> Across 8 industries</span>
+                        </div>
+                        <div class="kpi-sparkline" id="sparkline4"></div>
+                    </div>
+                </div>
+
+                <!-- AI Analytics Widgets (Groq-powered) -->
+                <div id="analyticsWidgetGrid" class="analytics-widget-section">
+                    <!-- Populated dynamically by scraper.js -->
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid">
+                    <!-- Employment by Program Chart -->
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3>Employment Rate by Program & Degree</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn active" data-view="bar">Bar</button>
+                                <button class="chart-btn" data-view="line">Line</button>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="employmentByProgramChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Employment Status Donut -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Employment Status Distribution</h3>
+                        </div>
+                        <div class="chart-body donut-container">
+                            <canvas id="employmentStatusChart"></canvas>
+                            <div class="donut-center-text">
+                                <span class="donut-value">63.6%</span>
+                                <span class="donut-label">Employed</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Companies -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Top Hiring Companies</h3>
+                        </div>
+                        <div class="chart-body">
+                            <div class="company-list">
+                                <div class="company-item">
+                                    <div class="company-rank">1</div>
+                                    <div class="company-info">
+                                        <span class="company-name">Department of Finance 295</span>
+                                        <div class="company-bar-wrapper">
+                                            <div class="company-bar" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                    <span class="company-count">39</span>
+                                </div>
+                                <div class="company-item">
+                                    <div class="company-rank">2</div>
+                                    <div class="company-info">
+                                        <span class="company-name">Apex Holdings 58</span>
+                                        <div class="company-bar-wrapper">
+                                            <div class="company-bar" style="width: 95%"></div>
+                                        </div>
+                                    </div>
+                                    <span class="company-count">37</span>
+                                </div>
+                                <div class="company-item">
+                                    <div class="company-rank">3</div>
+                                    <div class="company-info">
+                                        <span class="company-name">Tech Corp 75</span>
+                                        <div class="company-bar-wrapper">
+                                            <div class="company-bar" style="width: 87%"></div>
+                                        </div>
+                                    </div>
+                                    <span class="company-count">34</span>
+                                </div>
+                                <div class="company-item">
+                                    <div class="company-rank">4</div>
+                                    <div class="company-info">
+                                        <span class="company-name">Global Enterprises 95</span>
+                                        <div class="company-bar-wrapper">
+                                            <div class="company-bar" style="width: 87%"></div>
+                                        </div>
+                                    </div>
+                                    <span class="company-count">34</span>
+                                </div>
+                                <div class="company-item">
+                                    <div class="company-rank">5</div>
+                                    <div class="company-info">
+                                        <span class="company-name">Arab Corp 77</span>
+                                        <div class="company-bar-wrapper">
+                                            <div class="company-bar" style="width: 87%"></div>
+                                        </div>
+                                    </div>
+                                    <span class="company-count">34</span>
+                                </div>
+                                <div class="company-item">
+                                    <div class="company-rank">6</div>
+                                    <div class="company-info">
+                                        <span class="company-name">NextGen Systems 61</span>
+                                        <div class="company-bar-wrapper">
+                                            <div class="company-bar" style="width: 87%"></div>
+                                        </div>
+                                    </div>
+                                    <span class="company-count">34</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skill Demand Radar -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Top Skills in Demand</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="skillRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Alumni Activity -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Recent Alumni Updates</h3>
+                            <a href="#" class="view-all-link">View All →</a>
+                        </div>
+                        <div class="chart-body">
+                            <div class="activity-feed">
+                                <div class="activity-item">
+                                    <div class="activity-avatar"
+                                        style="background: linear-gradient(135deg, #6366f1, #818cf8)">AK</div>
+                                    <div class="activity-content">
+                                        <p><strong>Ahmed Khan</strong> joined <strong>Systems Limited</strong> as Data
+                                            Analyst</p>
+                                        <span class="activity-time">2 hours ago</span>
+                                    </div>
+                                    <span class="activity-badge badge-new">New Job</span>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-avatar"
+                                        style="background: linear-gradient(135deg, #f43f5e, #fb7185)">SA</div>
+                                    <div class="activity-content">
+                                        <p><strong>Sara Ali</strong> promoted to <strong>Senior PM</strong> at Nestle
+                                        </p>
+                                        <span class="activity-time">5 hours ago</span>
+                                    </div>
+                                    <span class="activity-badge badge-promotion">Promoted</span>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-avatar"
+                                        style="background: linear-gradient(135deg, #10b981, #34d399)">MR</div>
+                                    <div class="activity-content">
+                                        <p><strong>Muhammad Raza</strong> completed <strong>PMP Certification</strong>
+                                        </p>
+                                        <span class="activity-time">1 day ago</span>
+                                    </div>
+                                    <span class="activity-badge badge-cert">Certified</span>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-avatar"
+                                        style="background: linear-gradient(135deg, #f59e0b, #fbbf24)">FZ</div>
+                                    <div class="activity-content">
+                                        <p><strong>Fatima Zahra</strong> started PhD at <strong>LUMS</strong></p>
+                                        <span class="activity-time">2 days ago</span>
+                                    </div>
+                                    <span class="activity-badge badge-education">Education</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== ALUMNI DIRECTORY PAGE ==================== -->
+            <section class="page" id="page-alumni">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Alumni Directory</h2>
+                        <p class="page-subtitle">Browse and search through all alumni records</p>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-outline" id="filterAlumniBtn">
+                            <i class="fas fa-filter"></i> Filters
+                        </button>
+                        <button class="btn btn-primary admin-only" id="addAlumniBtn">
+                            <i class="fas fa-plus"></i> Add Alumni
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Alumni-only: Privacy notice -->
+                <div class="alumni-directory-notice" style="display:none;">
+                    <div class="chart-card" style="text-align:center;padding:48px 32px;">
+                        <div style="font-size:3rem;margin-bottom:16px;color:var(--accent-primary-light);">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 style="margin-bottom:12px;color:var(--text-primary);">Privacy Protected Directory</h3>
+                        <p style="color:var(--text-muted);max-width:520px;margin:0 auto 24px;line-height:1.6;">
+                            For data privacy and security, personal alumni information (emails, contact numbers, and
+                            individual records)
+                            is only accessible to authorized administrators. You can view general insights from the
+                            dashboard.
+                        </p>
+                        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                            <div class="kpi-card" style="min-width:140px;padding:16px 20px;">
+                                <div class="kpi-label">Total Alumni</div>
+                                <div class="kpi-value" style="font-size:1.6rem;">4,000</div>
+                            </div>
+                            <div class="kpi-card" style="min-width:140px;padding:16px 20px;">
+                                <div class="kpi-label">Partner Companies</div>
+                                <div class="kpi-value" style="font-size:1.6rem;">100</div>
+                            </div>
+                            <div class="kpi-card" style="min-width:140px;padding:16px 20px;">
+                                <div class="kpi-label">Employment Rate</div>
+                                <div class="kpi-value" style="font-size:1.6rem;">63.6%</div>
+                            </div>
+                        </div>
+                        <p style="color:var(--text-muted);font-size:0.78rem;margin-top:20px;">
+                            <i class="fas fa-info-circle"></i> To update your own records, visit <strong>My
+                                Profile</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar" id="alumniFilterBar">
+                    <div class="filter-group">
+                        <label>Search</label>
+                        <input type="text" class="filter-select" id="alumniSearchInput" placeholder="Search name, email..." style="padding:6px 12px;">
+                    </div>
+                    <div class="filter-group">
+                        <label>Program</label>
+                        <select class="filter-select" id="filterProgram">
+                            <option value="all">All Programs</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Degree</label>
+                        <select class="filter-select" id="filterDegree">
+                            <option value="all">All Degrees</option>
+                            <option value="BS">BS</option>
+                            <option value="MS">MS</option>
+                            <option value="PhD">PhD</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Graduation Year</label>
+                        <select class="filter-select" id="filterGradYear">
+                            <option value="all">All Years</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select class="filter-select" id="filterStatus">
+                            <option value="all">All Status</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Rows</label>
+                        <select class="filter-select" id="rowsPerPage">
+                            <option value="10">10</option>
+                            <option value="16" selected>16</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Alumni Table -->
+                <div class="table-container">
+                    <table class="data-table" id="alumniTable">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAllAlumni"></th>
+                                <th>Alumni</th>
+                                <th>Program</th>
+                                <th>Degree</th>
+                                <th>Graduation</th>
+                                <th>CGPA</th>
+                                <th>Status</th>
+                                <th>Current Company</th>
+                                <th class="admin-only-col"><i class="fas fa-lock"
+                                        style="font-size:0.65rem;margin-right:4px;opacity:0.5"></i>Personal Email</th>
+                                <th class="admin-only-col"><i class="fas fa-lock"
+                                        style="font-size:0.65rem;margin-right:4px;opacity:0.5"></i>Contact</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alumniTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                    <div class="table-pagination">
+                        <span class="pagination-info">Loading...</span>
+                        <div class="pagination-controls">
+                            <!-- Dynamically populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== EMPLOYABILITY PREDICTOR PAGE ==================== -->
+            <section class="page" id="page-predictor">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Employability Predictor</h2>
+                        <p class="page-subtitle">AI-powered employability score prediction using ML & DL models</p>
+                    </div>
+                </div>
+
+                <div class="predictor-layout">
+                    <!-- Input Form -->
+                    <div class="predictor-form-card">
+                        <div class="card-header-accent">
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                            <h3>Student Profile Input</h3>
+                        </div>
+                        <form id="predictorForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="predName">Full Name</label>
+                                    <input type="text" id="predName" placeholder="Enter student name"
+                                        class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="predProgram">Program</label>
+                                    <select id="predProgram" class="form-input">
+                                        <option value="">Select Program</option>
+                                        <optgroup label="Business Administration">
+                                            <option value="bba2yr">BBA – 2 Years</option>
+                                            <option value="bba4yr">BBA – 4 Years</option>
+                                            <option value="bsPubAdmin">BS Public Administration</option>
+                                            <option value="msPubAdmin">MS Public Administration</option>
+                                            <option value="mba2yr">MBA – 2 Years</option>
+                                            <option value="mbaExec">MBA – Executive</option>
+                                        </optgroup>
+                                        <optgroup label="Accounting, Finance & Commerce">
+                                            <option value="bsAccFin">BS Accounting & Finance</option>
+                                            <option value="msAccFin">MS Accounting & Finance</option>
+                                            <option value="bsCommerce">BS Commerce</option>
+                                            <option value="msCommerce">MS Commerce</option>
+                                        </optgroup>
+                                        <optgroup label="Technology & Project Management">
+                                            <option value="bsBA">BS Business Analytics</option>
+                                            <option value="msBA">MS Business Analytics</option>
+                                            <option value="bsFintech">BS Fintech & E-Commerce</option>
+                                            <option value="msFintech">MS Fintech & E-Commerce</option>
+                                            <option value="bsPM">BS Project Management</option>
+                                            <option value="msPM">MS Project Management</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="predDegree">Degree Level</label>
+                                    <select id="predDegree" class="form-input">
+                                        <option value="">Select Degree</option>
+                                        <option value="bs">BS</option>
+                                        <option value="bba">BBA</option>
+                                        <option value="mba">MBA</option>
+                                        <option value="ms">MS</option>
+                                        <option value="phd">PhD</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="predCGPA">CGPA (0-4.0)</label>
+                                    <input type="number" id="predCGPA" placeholder="e.g., 3.45" min="0" max="4"
+                                        step="0.01" class="form-input">
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label>Technical Skills</label>
+                                <div class="skill-tags-input">
+                                    <div class="skill-tags" id="techSkillTags">
+                                        <span class="skill-tag">Python <button class="tag-remove">×</button></span>
+                                        <span class="skill-tag">SQL <button class="tag-remove">×</button></span>
+                                        <span class="skill-tag">Power BI <button class="tag-remove">×</button></span>
+                                    </div>
+                                    <input type="text" placeholder="Type a skill and press Enter..." class="tag-input"
+                                        id="techSkillInput">
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="predInternships">Internships Completed</label>
+                                    <input type="number" id="predInternships" placeholder="0" min="0"
+                                        class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="predProjects">Projects Completed</label>
+                                    <input type="number" id="predProjects" placeholder="0" min="0" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="predCerts">Certifications</label>
+                                    <input type="number" id="predCerts" placeholder="0" min="0" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="predPublications">Research Publications</label>
+                                    <input type="number" id="predPublications" placeholder="0" min="0"
+                                        class="form-input">
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="predExtracurricular">Extracurricular Activities</label>
+                                <textarea id="predExtracurricular"
+                                    placeholder="List activities, societies, competitions..."
+                                    class="form-input form-textarea"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Select ML/DL Model</label>
+                                <div class="model-selector">
+                                    <label class="model-option active">
+                                        <input type="radio" name="model" value="xgboost" checked>
+                                        <div class="model-card">
+                                            <i class="fas fa-tree"></i>
+                                            <span>XGBoost</span>
+                                            <small>94.2% acc.</small>
+                                        </div>
+                                    </label>
+                                    <label class="model-option">
+                                        <input type="radio" name="model" value="rf">
+                                        <div class="model-card">
+                                            <i class="fas fa-forest"></i>
+                                            <span>Random Forest</span>
+                                            <small>91.8% acc.</small>
+                                        </div>
+                                    </label>
+                                    <label class="model-option">
+                                        <input type="radio" name="model" value="ann">
+                                        <div class="model-card">
+                                            <i class="fas fa-brain"></i>
+                                            <span>Neural Network</span>
+                                            <small>93.5% acc.</small>
+                                        </div>
+                                    </label>
+                                    <label class="model-option">
+                                        <input type="radio" name="model" value="lstm">
+                                        <div class="model-card">
+                                            <i class="fas fa-network-wired"></i>
+                                            <span>LSTM</span>
+                                            <small>92.1% acc.</small>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-large" id="predictBtn">
+                                <i class="fas fa-rocket"></i> Predict Employability
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Results Panel -->
+                    <div class="predictor-results" id="predictorResults">
+                        <div class="results-placeholder">
+                            <div class="placeholder-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h3>Ready to Predict</h3>
+                            <p>Fill in the student profile and click "Predict Employability" to get AI-powered insights
+                            </p>
+                        </div>
+
+                        <!-- This gets shown after prediction -->
+                        <div class="results-content hidden" id="resultsContent">
+                            <div class="score-ring-container">
+                                <div class="score-ring">
+                                    <svg viewBox="0 0 200 200">
+                                        <circle class="score-ring-bg" cx="100" cy="100" r="85"></circle>
+                                        <circle class="score-ring-fill" cx="100" cy="100" r="85" id="scoreRing">
+                                        </circle>
+                                    </svg>
+                                    <div class="score-text">
+                                        <span class="score-number" id="scoreValue">0</span>
+                                        <span class="score-label">Employability Score</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="prediction-details">
+                                <div class="prediction-item">
+                                    <div class="prediction-icon positive">
+                                        <i class="fas fa-briefcase"></i>
+                                    </div>
+                                    <div>
+                                        <span class="prediction-label">Likely Industry</span>
+                                        <span class="prediction-value" id="predIndustry">IT & Consulting</span>
+                                    </div>
+                                </div>
+                                <div class="prediction-item">
+                                    <div class="prediction-icon info">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <span class="prediction-label">Est. Time to Employment</span>
+                                        <span class="prediction-value" id="predTime">1-2 months</span>
+                                    </div>
+                                </div>
+                                <div class="prediction-item">
+                                    <div class="prediction-icon warning">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                    <div>
+                                        <span class="prediction-label">Expected Salary Range</span>
+                                        <span class="prediction-value" id="predSalary">PKR 80K - 120K</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="skill-gap-section">
+                                <h4><i class="fas fa-chart-bar"></i> Skill Gap Analysis</h4>
+                                <div class="skill-gap-bars">
+                                    <div class="skill-gap-item">
+                                        <span class="skill-name">Python</span>
+                                        <div class="skill-bar-container">
+                                            <div class="skill-bar-fill" style="width: 85%"></div>
+                                        </div>
+                                        <span class="skill-level">85%</span>
+                                    </div>
+                                    <div class="skill-gap-item">
+                                        <span class="skill-name">SQL</span>
+                                        <div class="skill-bar-container">
+                                            <div class="skill-bar-fill" style="width: 78%"></div>
+                                        </div>
+                                        <span class="skill-level">78%</span>
+                                    </div>
+                                    <div class="skill-gap-item">
+                                        <span class="skill-name">Machine Learning</span>
+                                        <div class="skill-bar-container">
+                                            <div class="skill-bar-fill low" style="width: 45%"></div>
+                                        </div>
+                                        <span class="skill-level">45%</span>
+                                    </div>
+                                    <div class="skill-gap-item">
+                                        <span class="skill-name">Power BI</span>
+                                        <div class="skill-bar-container">
+                                            <div class="skill-bar-fill" style="width: 92%"></div>
+                                        </div>
+                                        <span class="skill-level">92%</span>
+                                    </div>
+                                    <div class="skill-gap-item">
+                                        <span class="skill-name">Communication</span>
+                                        <div class="skill-bar-container">
+                                            <div class="skill-bar-fill medium" style="width: 60%"></div>
+                                        </div>
+                                        <span class="skill-level">60%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="recommendations-section">
+                                <h4><i class="fas fa-lightbulb"></i> Recommendations</h4>
+                                <div class="recommendation-cards">
+                                    <div class="rec-card">
+                                        <i class="fas fa-certificate"></i>
+                                        <p>Obtain <strong>AWS Data Analytics</strong> certification to boost
+                                            employability by ~12%</p>
+                                    </div>
+                                    <div class="rec-card">
+                                        <i class="fas fa-laptop-code"></i>
+                                        <p>Complete <strong>2 more industry projects</strong> to match top-performing
+                                            alumni profiles</p>
+                                    </div>
+                                    <div class="rec-card">
+                                        <i class="fas fa-handshake"></i>
+                                        <p>Apply to <strong>Systems Limited</strong> and <strong>Nestle</strong> —
+                                            highest match with your profile</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== EMPLOYMENT ANALYTICS PAGE ==================== -->
+            <section class="page" id="page-employment">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Employment Analytics</h2>
+                        <p class="page-subtitle">Detailed analysis of alumni employment patterns</p>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Industry Distribution</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="industryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Job Level Distribution</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="jobLevelChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3>Salary Distribution by Program</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="salaryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Company Type Distribution</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="companyTypeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== SKILL ANALYTICS PAGE ==================== -->
+            <section class="page" id="page-skills">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Skill Analytics</h2>
+                        <p class="page-subtitle">Most demanded skills and competency mapping</p>
+                    </div>
+                </div>
+
+                <div class="skills-layout">
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3>Top 15 Skills Among Employed Alumni</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="topSkillsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Skills by Program</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="skillsByProgramChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Skill Word Cloud placeholder -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Skills Heatmap</h3>
+                        </div>
+                        <div class="chart-body">
+                            <div class="skill-heatmap" id="skillHeatmap">
+                                <div class="heatmap-item level-5">Python</div>
+                                <div class="heatmap-item level-5">SQL</div>
+                                <div class="heatmap-item level-4">Power BI</div>
+                                <div class="heatmap-item level-4">Excel</div>
+                                <div class="heatmap-item level-4">Tableau</div>
+                                <div class="heatmap-item level-3">R Programming</div>
+                                <div class="heatmap-item level-3">Machine Learning</div>
+                                <div class="heatmap-item level-5">Data Analysis</div>
+                                <div class="heatmap-item level-3">SPSS</div>
+                                <div class="heatmap-item level-2">Deep Learning</div>
+                                <div class="heatmap-item level-4">Project Planning</div>
+                                <div class="heatmap-item level-4">Agile/Scrum</div>
+                                <div class="heatmap-item level-3">Risk Management</div>
+                                <div class="heatmap-item level-2">NLP</div>
+                                <div class="heatmap-item level-5">MS Project</div>
+                                <div class="heatmap-item level-3">SAP</div>
+                                <div class="heatmap-item level-4">Communication</div>
+                                <div class="heatmap-item level-3">Leadership</div>
+                                <div class="heatmap-item level-2">TensorFlow</div>
+                                <div class="heatmap-item level-4">Critical Thinking</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== GEOGRAPHIC MAP PAGE ==================== -->
+            <section class="page" id="page-geographic">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Geographic Distribution</h2>
+                        <p class="page-subtitle">Where our alumni are working around the world</p>
+                    </div>
+                </div>
+
+                <div class="geo-layout">
+                    <div class="chart-card geo-map-card">
+                        <div class="chart-header">
+                            <h3>Alumni World Map</h3>
+                        </div>
+                        <div class="chart-body">
+                            <div class="world-map-placeholder" id="worldMap">
+                                <div class="map-container">
+                                    <!-- Simplified SVG world map with dots -->
+                                    <svg viewBox="0 0 1000 500" class="world-svg">
+                                        <!-- Continents simplified outlines -->
+                                        <rect x="0" y="0" width="1000" height="500" fill="transparent" />
+                                        <!-- Location dots -->
+                                        <circle cx="235" cy="185" r="8" class="map-dot large" data-city="New York"
+                                            data-count="32">
+                                            <animate attributeName="r" values="8;12;8" dur="2s"
+                                                repeatCount="indefinite" />
+                                        </circle>
+                                        <circle cx="475" cy="165" r="6" class="map-dot medium" data-city="London"
+                                            data-count="18">
+                                            <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"
+                                                begin="0.3s" />
+                                        </circle>
+                                        <circle cx="500" cy="215" r="5" class="map-dot medium" data-city="Dubai"
+                                            data-count="45">
+                                            <animate attributeName="r" values="5;9;5" dur="2s" repeatCount="indefinite"
+                                                begin="0.6s" />
+                                        </circle>
+                                        <circle cx="560" cy="225" r="14" class="map-dot xlarge" data-city="Lahore"
+                                            data-count="890">
+                                            <animate attributeName="r" values="14;18;14" dur="2s"
+                                                repeatCount="indefinite" begin="0.1s" />
+                                        </circle>
+                                        <circle cx="570" cy="220" r="12" class="map-dot xlarge" data-city="Karachi"
+                                            data-count="520">
+                                            <animate attributeName="r" values="12;16;12" dur="2s"
+                                                repeatCount="indefinite" begin="0.4s" />
+                                        </circle>
+                                        <circle cx="555" cy="215" r="10" class="map-dot large" data-city="Islamabad"
+                                            data-count="340">
+                                            <animate attributeName="r" values="10;14;10" dur="2s"
+                                                repeatCount="indefinite" begin="0.7s" />
+                                        </circle>
+                                        <circle cx="680" cy="260" r="5" class="map-dot medium" data-city="Singapore"
+                                            data-count="12">
+                                            <animate attributeName="r" values="5;9;5" dur="2s" repeatCount="indefinite"
+                                                begin="0.9s" />
+                                        </circle>
+                                        <circle cx="815" cy="350" r="5" class="map-dot medium" data-city="Sydney"
+                                            data-count="8">
+                                            <animate attributeName="r" values="5;9;5" dur="2s" repeatCount="indefinite"
+                                                begin="0.5s" />
+                                        </circle>
+                                        <circle cx="250" cy="270" r="4" class="map-dot small" data-city="Toronto"
+                                            data-count="15">
+                                            <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"
+                                                begin="0.2s" />
+                                        </circle>
+                                        <circle cx="520" cy="195" r="4" class="map-dot small" data-city="Riyadh"
+                                            data-count="28">
+                                            <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"
+                                                begin="0.8s" />
+                                        </circle>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="geo-sidebar">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Top Locations</h3>
+                            </div>
+                            <div class="chart-body">
+                                <div class="location-list">
+                                    <div class="location-item">
+                                        <span class="location-flag">🇵🇰</span>
+                                        <div>
+                                            <span class="location-name">Lahore, Pakistan</span>
+                                            <div class="location-bar-wrapper">
+                                                <div class="location-bar" style="width: 92%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="location-count">890</span>
+                                    </div>
+                                    <div class="location-item">
+                                        <span class="location-flag">🇵🇰</span>
+                                        <div>
+                                            <span class="location-name">Karachi, Pakistan</span>
+                                            <div class="location-bar-wrapper">
+                                                <div class="location-bar" style="width: 65%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="location-count">520</span>
+                                    </div>
+                                    <div class="location-item">
+                                        <span class="location-flag">🇵🇰</span>
+                                        <div>
+                                            <span class="location-name">Islamabad, Pakistan</span>
+                                            <div class="location-bar-wrapper">
+                                                <div class="location-bar" style="width: 42%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="location-count">340</span>
+                                    </div>
+                                    <div class="location-item">
+                                        <span class="location-flag">🇦🇪</span>
+                                        <div>
+                                            <span class="location-name">Dubai, UAE</span>
+                                            <div class="location-bar-wrapper">
+                                                <div class="location-bar" style="width: 18%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="location-count">45</span>
+                                    </div>
+                                    <div class="location-item">
+                                        <span class="location-flag">🇺🇸</span>
+                                        <div>
+                                            <span class="location-name">New York, USA</span>
+                                            <div class="location-bar-wrapper">
+                                                <div class="location-bar" style="width: 12%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="location-count">32</span>
+                                    </div>
+                                    <div class="location-item">
+                                        <span class="location-flag">🇸🇦</span>
+                                        <div>
+                                            <span class="location-name">Riyadh, Saudi Arabia</span>
+                                            <div class="location-bar-wrapper">
+                                                <div class="location-bar" style="width: 10%"></div>
+                                            </div>
+                                        </div>
+                                        <span class="location-count">28</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== TREND ANALYSIS PAGE ==================== -->
+            <section class="page" id="page-trends">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Trend Analysis</h2>
+                        <p class="page-subtitle">Year-over-year employment and academic trends</p>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-card large">
+                        <div class="chart-header">
+                            <h3>Employment Rate Trends (2018-2024)</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Average CGPA Trends</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="cgpaTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Graduates per Year</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="graduatesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== PROGRAM COMPARISON PAGE ==================== -->
+            <section class="page" id="page-programs">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Program Comparison</h2>
+                        <p class="page-subtitle">Compare outcomes across programs and degree levels</p>
+                    </div>
+                </div>
+
+                <div class="comparison-grid">
+                <!-- Accounting & Finance -->
+                <div class="program-card">
+                    <div class="program-card-header" style="background: linear-gradient(135deg, #f59e0b, #fbbf24)">
+                        <i class="fas fa-coins"></i>
+                        <h3>Accounting & Finance</h3>
+                    </div>
+                    <div class="program-card-body">
+                        <div class="program-stat">
+                            <span class="stat-label">Total Alumni</span>
+                            <span class="stat-value">664</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Employment Rate</span>
+                            <span class="stat-value text-success">61.9%</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Avg. CGPA</span>
+                            <span class="stat-value">3.12</span>
+                        </div>
+                        <div class="degree-breakdown">
+                            <h4>By Degree</h4>
+                            <div class="degree-row">
+                                <span>BS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 60.6%; background: linear-gradient(90deg, #f59e0b, #fbbf24)"></div></div>
+                                <span>60.6%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>MS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 67.3%; background: linear-gradient(90deg, #f59e0b, #fbbf24)"></div></div>
+                                <span>67.3%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>PhD</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 56.1%; background: linear-gradient(90deg, #f59e0b, #fbbf24)"></div></div>
+                                <span>56.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Admin -->
+                <div class="program-card">
+                    <div class="program-card-header" style="background: linear-gradient(135deg, #6366f1, #818cf8)">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>Business Admin</h3>
+                    </div>
+                    <div class="program-card-body">
+                        <div class="program-stat">
+                            <span class="stat-label">Total Alumni</span>
+                            <span class="stat-value">690</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Employment Rate</span>
+                            <span class="stat-value text-success">64.3%</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Avg. CGPA</span>
+                            <span class="stat-value">3.10</span>
+                        </div>
+                        <div class="degree-breakdown">
+                            <h4>By Degree</h4>
+                            <div class="degree-row">
+                                <span>BS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 63.7%; background: linear-gradient(90deg, #6366f1, #818cf8)"></div></div>
+                                <span>63.7%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>MS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 66.9%; background: linear-gradient(90deg, #6366f1, #818cf8)"></div></div>
+                                <span>66.9%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>PhD</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 60.0%; background: linear-gradient(90deg, #6366f1, #818cf8)"></div></div>
+                                <span>60.0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Analytics -->
+                <div class="program-card">
+                    <div class="program-card-header ba-theme">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Business Analytics</h3>
+                    </div>
+                    <div class="program-card-body">
+                        <div class="program-stat">
+                            <span class="stat-label">Total Alumni</span>
+                            <span class="stat-value">682</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Employment Rate</span>
+                            <span class="stat-value text-success">64.7%</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Avg. CGPA</span>
+                            <span class="stat-value">3.09</span>
+                        </div>
+                        <div class="degree-breakdown">
+                            <h4>By Degree</h4>
+                            <div class="degree-row">
+                                <span>BS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar ba" style="width: 65.5%"></div></div>
+                                <span>65.5%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>MS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar ba" style="width: 64.8%"></div></div>
+                                <span>64.8%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>PhD</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar ba" style="width: 54.8%"></div></div>
+                                <span>54.8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fintech -->
+                <div class="program-card">
+                    <div class="program-card-header" style="background: linear-gradient(135deg, #ec4899, #f472b6)">
+                        <i class="fas fa-microchip"></i>
+                        <h3>Fintech</h3>
+                    </div>
+                    <div class="program-card-body">
+                        <div class="program-stat">
+                            <span class="stat-label">Total Alumni</span>
+                            <span class="stat-value">666</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Employment Rate</span>
+                            <span class="stat-value text-success">64.3%</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Avg. CGPA</span>
+                            <span class="stat-value">3.13</span>
+                        </div>
+                        <div class="degree-breakdown">
+                            <h4>By Degree</h4>
+                            <div class="degree-row">
+                                <span>BS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 64.9%; background: linear-gradient(90deg, #ec4899, #f472b6)"></div></div>
+                                <span>64.9%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>MS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 63.1%; background: linear-gradient(90deg, #ec4899, #f472b6)"></div></div>
+                                <span>63.1%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>PhD</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 60.6%; background: linear-gradient(90deg, #ec4899, #f472b6)"></div></div>
+                                <span>60.6%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Management -->
+                <div class="program-card">
+                    <div class="program-card-header pm-theme">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>Project Management</h3>
+                    </div>
+                    <div class="program-card-body">
+                        <div class="program-stat">
+                            <span class="stat-label">Total Alumni</span>
+                            <span class="stat-value">654</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Employment Rate</span>
+                            <span class="stat-value text-success">61.3%</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Avg. CGPA</span>
+                            <span class="stat-value">3.09</span>
+                        </div>
+                        <div class="degree-breakdown">
+                            <h4>By Degree</h4>
+                            <div class="degree-row">
+                                <span>BS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar pm" style="width: 63.2%"></div></div>
+                                <span>63.2%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>MS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar pm" style="width: 57.7%"></div></div>
+                                <span>57.7%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>PhD</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar pm" style="width: 51.4%"></div></div>
+                                <span>51.4%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Public Admin -->
+                <div class="program-card">
+                    <div class="program-card-header" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa)">
+                        <i class="fas fa-landmark"></i>
+                        <h3>Public Admin</h3>
+                    </div>
+                    <div class="program-card-body">
+                        <div class="program-stat">
+                            <span class="stat-label">Total Alumni</span>
+                            <span class="stat-value">644</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Employment Rate</span>
+                            <span class="stat-value text-success">64.9%</span>
+                        </div>
+                        <div class="program-stat">
+                            <span class="stat-label">Avg. CGPA</span>
+                            <span class="stat-value">3.07</span>
+                        </div>
+                        <div class="degree-breakdown">
+                            <h4>By Degree</h4>
+                            <div class="degree-row">
+                                <span>BS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 66.2%; background: linear-gradient(90deg, #8b5cf6, #a78bfa)"></div></div>
+                                <span>66.2%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>MS</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 62.2%; background: linear-gradient(90deg, #8b5cf6, #a78bfa)"></div></div>
+                                <span>62.2%</span>
+                            </div>
+                            <div class="degree-row">
+                                <span>PhD</span>
+                                <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 58.1%; background: linear-gradient(90deg, #8b5cf6, #a78bfa)"></div></div>
+                                <span>58.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card large comparison-chart">
+                    <div class="chart-header">
+                        <h3>Program Comparison — Employment Rate Over Years</h3>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="programComparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            </section>
+
+            <!-- ==================== ADMIN PANEL PAGE ==================== -->
+            <section class="page" id="page-admin">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Admin Panel</h2>
+                        <p class="page-subtitle">Manage alumni records, models, and system settings</p>
+                    </div>
+                </div>
+
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <div class="admin-card-icon" style="background: linear-gradient(135deg, #6366f1, #818cf8)">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h3>Add Alumni Record</h3>
+                        <p>Add new alumni data to the database</p>
+                        <button class="btn btn-outline" id="adminAddAlumniBtn">Open Form</button>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-icon" style="background: linear-gradient(135deg, #f43f5e, #fb7185)">
+                            <i class="fas fa-file-import"></i>
+                        </div>
+                        <h3>Bulk Import</h3>
+                        <p>Import alumni data from CSV files</p>
+                        <button class="btn btn-outline" id="adminBulkImportBtn">Upload File</button>
+                        <input type="file" id="adminBulkImportFile" accept=".csv" style="display:none;">
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-icon" style="background: linear-gradient(135deg, #10b981, #34d399)">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <h3>Refresh Data</h3>
+                        <p>Reload all alumni data from database</p>
+                        <button class="btn btn-outline" id="adminRefreshBtn">Refresh Now</button>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24)">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <h3>Export Data</h3>
+                        <p>Export alumni data as CSV download</p>
+                        <button class="btn btn-outline" id="adminExportBtn">Export CSV</button>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa)">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3>Database Stats</h3>
+                        <p>View live database statistics</p>
+                        <button class="btn btn-outline" id="adminStatsBtn">View Stats</button>
+                    </div>
+                    <div class="admin-card">
+                        <div class="admin-card-icon" style="background: linear-gradient(135deg, #06b6d4, #22d3ee)">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>Connection Status</h3>
+                        <p>Check Supabase connection health</p>
+                        <button class="btn btn-outline" id="adminConnectionBtn">Check Status</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== JOB MARKET INTELLIGENCE PAGE ==================== -->
+            <section class="page" id="page-jobmarket">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Job Market Intelligence</h2>
+                        <p class="page-subtitle">AI-powered job market analysis & alumni skill gap detection</p>
+                    </div>
+                    <div class="page-actions">
+                        <div id="scraperLoadingIndicator" style="display:none;align-items:center;gap:8px;color:var(--text-muted);font-size:0.85rem">
+                            <i class="fas fa-spinner fa-spin"></i> Scanning market...
+                        </div>
+                        <button class="btn btn-primary" onclick="jobScraper.renderJobMarketPage()">
+                            <i class="fas fa-satellite-dish"></i> Scan Job Market
+                        </button>
+                    </div>
+                </div>
+                <div id="jobMarketContent">
+                    <div class="job-market-intro">
+                        <div class="jm-intro-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>Ready to Analyze the Job Market</h3>
+                        <p>Click <strong>"Scan Job Market"</strong> to fetch real-time job data and compare it with alumni skills using Groq AI.</p>
+                        <div class="jm-intro-features">
+                            <div class="jm-feature">
+                                <i class="fas fa-search"></i>
+                                <span>Scrapes live job postings</span>
+                            </div>
+                            <div class="jm-feature">
+                                <i class="fas fa-brain"></i>
+                                <span>Groq AI summarizes trends</span>
+                            </div>
+                            <div class="jm-feature">
+                                <i class="fas fa-crosshairs"></i>
+                                <span>Compares alumni skills to market</span>
+                            </div>
+                            <div class="jm-feature">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Generates actionable insights</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== MY PROFILE PAGE ==================== -->
+            <section class="page" id="page-profile">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">My Profile</h2>
+                        <p class="page-subtitle">View and update your profile information</p>
+                    </div>
+                </div>
+
+                <div class="profile-layout">
+                    <!-- Profile Card -->
+                    <div class="profile-card">
+                        <div class="profile-header-gradient">
+                            <div class="profile-avatar-wrapper">
+                                <div class="profile-avatar" id="profileAvatar">
+                                    <span id="profileInitials">U</span>
+                                    <img id="profilePicImg" class="profile-pic-img hidden" alt="Profile" />
+                                </div>
+                                <label class="profile-pic-upload" for="profilePicInput" title="Upload profile picture">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+                                <input type="file" id="profilePicInput" accept="image/*" class="hidden">
+                            </div>
+                        </div>
+                        <div class="profile-body">
+                            <h3 id="profileDisplayName">User Name</h3>
+                            <span class="profile-role-badge" id="profileRoleBadge">Alumni</span>
+                            <p class="profile-email" id="profileDisplayEmail">email@example.com</p>
+                            <div class="profile-meta">
+                                <span><i class="fas fa-calendar-alt"></i> Joined <span
+                                        id="profileJoinDate">—</span></span>
+                                <span><i class="fas fa-clock"></i> Last updated <span
+                                        id="profileUpdateDate">—</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Edit Form -->
+                    <div class="profile-details-card">
+                        <div class="profile-section-header">
+                            <h3><i class="fas fa-user-edit"></i> Personal Information</h3>
+                            <button class="btn btn-outline btn-sm" id="editProfileBtn">
+                                <i class="fas fa-pen"></i> Edit
+                            </button>
+                        </div>
+
+                        <div class="auth-alert auth-alert-success hidden" id="profileSaveSuccess">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Profile updated successfully!</span>
+                        </div>
+                        <div class="auth-alert hidden" id="profileSaveError">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span id="profileSaveErrorText">Error</span>
+                        </div>
+
+                        <form id="profileForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="profileFullName">Full Name</label>
+                                    <input type="text" id="profileFullName" class="form-input" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileUniEmail">University Email</label>
+                                    <input type="email" id="profileUniEmail" class="form-input" disabled>
+                                    <small class="field-hint">Contact admin to change university email</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profilePersonalEmail"><i class="fas fa-lock"
+                                            style="font-size:0.65rem;opacity:0.5"></i> Personal Email</label>
+                                    <input type="email" id="profilePersonalEmail" class="form-input" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileContact"><i class="fas fa-lock"
+                                            style="font-size:0.65rem;opacity:0.5"></i> Contact Number</label>
+                                    <input type="tel" id="profileContact" class="form-input" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileCompany">Current Company</label>
+                                    <input type="text" id="profileCompany" class="form-input" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileJobTitle">Job Title / Role</label>
+                                    <input type="text" id="profileJobTitle" class="form-input" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileProgram">Program</label>
+                                    <input type="text" id="profileProgram" class="form-input" disabled>
+                                    <small class="field-hint alumni-hint">Contact admin to update academic info</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileDegree">Degree</label>
+                                    <input type="text" id="profileDegree" class="form-input" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileLinkedIn">LinkedIn Profile</label>
+                                    <input type="url" id="profileLinkedIn" class="form-input" disabled
+                                        placeholder="https://linkedin.com/in/...">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profileBio">Bio</label>
+                                    <textarea id="profileBio" class="form-input form-textarea" disabled
+                                        placeholder="Tell us about yourself..."></textarea>
+                                </div>
+                            </div>
+                            <div class="profile-form-actions hidden" id="profileFormActions">
+                                <button type="button" class="btn btn-outline" id="cancelProfileEdit">Cancel</button>
+                                <button type="submit" class="btn btn-primary" id="saveProfileBtn">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Change Password Section -->
+                        <div class="profile-section-header" style="margin-top: 32px;">
+                            <h3><i class="fas fa-key"></i> Change Password</h3>
+                        </div>
+                        <form id="changePasswordForm">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="currentPasswordProfile">Current Password</label>
+                                    <input type="password" id="currentPasswordProfile" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPasswordProfile">New Password</label>
+                                    <input type="password" id="newPasswordProfile" class="form-input" required>
+                                </div>
+                            </div>
+                            <div class="auth-alert hidden" id="passwordChangeError">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span id="passwordChangeErrorText"></span>
+                            </div>
+                            <div class="auth-alert auth-alert-success hidden" id="passwordChangeSuccess">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Password changed successfully!</span>
+                            </div>
+                            <button type="submit" class="btn btn-outline" style="margin-top:12px">
+                                <i class="fas fa-key"></i> Update Password
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Add Alumni Modal -->
+        <div class="modal-overlay hidden" id="addAlumniModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-plus"></i> Add New Alumni</h3>
+                    <button class="modal-close" id="closeModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addAlumniForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="alumniName">Full Name *</label>
+                                <input type="text" id="alumniName" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniEmail">University Email *</label>
+                                <input type="email" id="alumniEmail" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniPhone">Phone Number</label>
+                                <input type="tel" id="alumniPhone" class="form-input" placeholder="+92-300-1234567">
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniProgram">Program *</label>
+                                <select id="alumniProgram" class="form-input" required>
+                                    <option value="">Select Program</option>
+                                    <option value="Accounting & Finance">Accounting & Finance</option>
+                                    <option value="Business Admin">Business Admin</option>
+                                    <option value="Business Analytics">Business Analytics</option>
+                                    <option value="Fintech">Fintech</option>
+                                    <option value="Project Management">Project Management</option>
+                                    <option value="Public Admin">Public Admin</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniDegree">Degree Level *</label>
+                                <select id="alumniDegree" class="form-input" required>
+                                    <option value="">Select Degree</option>
+                                    <option value="BS">BS</option>
+                                    <option value="MS">MS</option>
+                                    <option value="PhD">PhD</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniGradYear">Graduation Year</label>
+                                <input type="number" id="alumniGradYear" class="form-input" min="2010" max="2030">
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniCGPA">CGPA</label>
+                                <input type="number" id="alumniCGPA" class="form-input" min="0" max="4" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniStatus">Employment Status</label>
+                                <select id="alumniStatus" class="form-input">
+                                    <option value="">Select Status</option>
+                                    <option value="Employed">Employed</option>
+                                    <option value="Seeking Employment">Seeking Employment</option>
+                                    <option value="Pursuing Higher Education">Pursuing Higher Education</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniJobTitle">Job Title</label>
+                                <input type="text" id="alumniJobTitle" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniLinkedIn">LinkedIn URL</label>
+                                <input type="url" id="alumniLinkedIn" class="form-input" placeholder="https://linkedin.com/in/...">
+                            </div>
+                        </div>
+                        <div class="modal-privacy-note">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Personal email and contact number will be stored securely and visible only to
+                                administrators.</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline" id="cancelModal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Alumni</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== AGENTIC AI ASSISTANT ==================== -->
+        <!-- Floating Action Button -->
+        <button class="ai-fab" id="aiAssistantFab" title="AI Assistant">
+            <div class="ai-fab-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="ai-fab-pulse"></div>
+        </button>
+
+        <!-- AI Assistant Panel -->
+        <div class="ai-assistant-panel" id="aiAssistantPanel">
+            <div class="ai-panel-header">
+                <div class="ai-panel-title">
+                    <div class="ai-panel-logo">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div>
+                        <h3>AlumniInsight AI</h3>
+                        <span class="ai-panel-status"><span class="ai-status-dot"></span> Agentic Mode</span>
+                    </div>
+                </div>
+                <div class="ai-panel-actions">
+                    <button class="ai-panel-btn" id="aiClearChat" title="Clear Chat">
+                        <i class="fas fa-broom"></i>
+                    </button>
+                    <button class="ai-panel-btn" id="aiClosePanel" title="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Action Chips -->
+            <div class="ai-quick-actions" id="aiQuickActions">
+                <!-- Populated dynamically based on user role -->
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="ai-chat-container" id="aiChatMessages">
+                <!-- Messages populated dynamically -->
+            </div>
+
+            <!-- Chat Input -->
+            <div class="ai-chat-input-area">
+                <div class="ai-input-wrapper">
+                    <textarea id="aiChatInput" placeholder="Ask the AI assistant..." rows="1"></textarea>
+                    <button class="ai-send-btn" id="aiSendBtn" title="Send">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="ai-input-hint">
+                    <i class="fas fa-bolt"></i>
+                    <span>Press Enter to send • Shift+Enter for new line</span>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- Close appContainer -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script src="scraper.js"></script>
+    <script src="agent.js"></script>
+</body>
+
+</html>

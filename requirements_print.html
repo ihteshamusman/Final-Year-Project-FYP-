@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Requirements — Integrated Alumni Analytics and Employability Prediction System</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-bg: #eef2ff;
+            --secondary: #0891b2;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        html {
+            font-size: 15px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== PAGE LAYOUT ===== */
+        .document {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 50px;
+        }
+
+        /* ===== COVER PAGE ===== */
+        .cover-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 50%, #f0fdfa 100%);
+            border-bottom: 4px solid var(--primary);
+            page-break-after: always;
+        }
+
+        .cover-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 32px;
+            box-shadow: 0 12px 40px rgba(79, 70, 229, 0.3);
+        }
+
+        .cover-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            line-height: 1.2;
+            margin-bottom: 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .cover-subtitle {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 480px;
+        }
+
+        .cover-meta {
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 2;
+        }
+
+        .cover-meta strong {
+            color: var(--text-secondary);
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 4px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            margin: 24px auto;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 20px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 24px;
+        }
+
+        /* ===== TABLE OF CONTENTS ===== */
+        .toc {
+            page-break-after: always;
+            padding: 50px 0;
+        }
+
+        .toc h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 28px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--primary-bg);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 10px 0;
+            border-bottom: 1px dotted var(--border);
+            font-size: 0.95rem;
+        }
+
+        .toc-list li span:first-child {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .toc-list li span:last-child {
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+        }
+
+        .toc-list li.toc-sub {
+            padding-left: 24px;
+            font-weight: 400;
+        }
+
+        .toc-list li.toc-sub span:first-child {
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HEADINGS ===== */
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-top: 48px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+            letter-spacing: -0.02em;
+            page-break-after: avoid;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-top: 32px;
+            margin-bottom: 14px;
+            page-break-after: avoid;
+        }
+
+        h3 {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-top: 24px;
+            margin-bottom: 10px;
+            page-break-after: avoid;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        strong {
+            color: var(--text);
+        }
+
+        /* ===== TABLES ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: 0.8rem;
+            page-break-inside: auto;
+        }
+
+        thead {
+            background: var(--primary);
+            color: white;
+        }
+
+        thead th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            page-break-inside: avoid;
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--bg-alt);
+        }
+
+        tbody td {
+            padding: 8px 12px;
+            vertical-align: top;
+            color: var(--text-secondary);
+        }
+
+        tbody td:first-child {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        code {
+            background: var(--primary-bg);
+            color: var(--primary);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        /* ===== CALLOUT BOXES ===== */
+        .callout {
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid;
+            page-break-inside: avoid;
+        }
+
+        .callout-important {
+            background: #fef2f2;
+            border-left-color: var(--danger);
+        }
+
+        .callout-important .callout-title {
+            color: var(--danger);
+        }
+
+        .callout-tip {
+            background: #f0fdf4;
+            border-left-color: var(--success);
+        }
+
+        .callout-tip .callout-title {
+            color: var(--success);
+        }
+
+        .callout-warning {
+            background: #fffbeb;
+            border-left-color: var(--warning);
+        }
+
+        .callout-warning .callout-title {
+            color: var(--warning);
+        }
+
+        .callout-title {
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .callout p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .callout ul {
+            margin: 6px 0 0 16px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .callout li {
+            margin-bottom: 4px;
+        }
+
+        /* ===== CODE BLOCK ===== */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 20px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            line-height: 1.8;
+            margin: 16px 0 24px;
+            overflow-x: auto;
+            page-break-inside: avoid;
+        }
+
+        .code-block .tree-branch {
+            color: #64748b;
+        }
+
+        .code-block .tree-key {
+            color: #818cf8;
+        }
+
+        .code-block .tree-arrow {
+            color: #64748b;
+        }
+
+        .code-block .tree-desc {
+            color: #94a3b8;
+        }
+
+        /* ===== ARCHITECTURE DIAGRAM (ASCII) ===== */
+        .diagram-container {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+
+        .diagram-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .arch-layer {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .arch-box {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .arch-box.collection {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .arch-box.processing {
+            background: #fce7f3;
+            color: #9d174d;
+            border: 1px solid #f9a8d4;
+        }
+
+        .arch-box.ml {
+            background: #ede9fe;
+            color: #5b21b6;
+            border: 1px solid #c4b5fd;
+        }
+
+        .arch-box.web {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .arch-box.feature {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+
+        .arch-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .arch-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        /* ===== CHECKLIST ===== */
+        .checklist {
+            list-style: none;
+            margin: 16px 0;
+        }
+
+        .checklist li {
+            padding: 8px 0 8px 32px;
+            position: relative;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 4px;
+            top: 8px;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+
+        /* ===== PRIORITY BADGES ===== */
+        .priority-must {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .priority-nice {
+            color: var(--warning);
+            font-weight: 700;
+        }
+
+        .priority-optional {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* ===== SECTION DIVIDER ===== */
+        hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 32px 0;
+        }
+
+        .section-break {
+            page-break-before: always;
+        }
+
+        /* ===== FOOTER ===== */
+        .page-footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .page-footer strong {
+            color: var(--primary);
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            html {
+                font-size: 13px;
+            }
+
+            body {
+                background: white;
+            }
+
+            .document {
+                padding: 20px 30px;
+                max-width: 100%;
+            }
+
+            .cover-page {
+                min-height: auto;
+                padding: 120px 40px;
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            table {
+                font-size: 0.75rem;
+            }
+
+            thead {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            tbody tr:nth-child(even) {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .callout {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .code-block {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .arch-box {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            h1 {
+                margin-top: 32px;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== COVER PAGE ===== -->
+    <div class="cover-page">
+        <div class="cover-logo">🎓</div>
+        <div class="cover-badge">FY Project — Requirements Document</div>
+        <h1 class="cover-title" style="border: none; margin: 0; padding: 0; font-size: 2rem;">
+            Integrated Alumni Analytics and Employability Prediction System
+        </h1>
+        <p class="cover-subtitle">Using Machine Learning and Deep Learning Techniques</p>
+        <div class="cover-divider"></div>
+        <div class="cover-meta">
+            <strong>Document Type:</strong> Complete Data &amp; Project Requirements<br>
+            <strong>Project Scope:</strong> BS, MS, PhD — Business Analytics &amp; Project Management<br>
+            <strong>Version:</strong> 1.0<br>
+            <strong>Date:</strong> April 2026<br>
+        </div>
+    </div>
+
+    <!-- ===== DOCUMENT BODY ===== -->
+    <div class="document">
+
+        <!-- TABLE OF CONTENTS -->
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ol class="toc-list">
+                <li><span>1. Data Requirements</span><span>3</span></li>
+                <li class="toc-sub"><span>1.1 Student Academic Data (Core Database)</span><span>3</span></li>
+                <li class="toc-sub"><span>1.2 Skills &amp; Competency Data</span><span>4</span></li>
+                <li class="toc-sub"><span>1.3 Employment &amp; Career Data</span><span>5</span></li>
+                <li><span>2. Data Collection Methods</span><span>6</span></li>
+                <li><span>3. ML/DL Model Requirements</span><span>7</span></li>
+                <li class="toc-sub"><span>3.1 Prediction Tasks</span><span>7</span></li>
+                <li class="toc-sub"><span>3.2 Recommended Models (ML &amp; DL)</span><span>7</span></li>
+                <li class="toc-sub"><span>3.3 Feature Engineering Requirements</span><span>8</span></li>
+                <li><span>4. Technical Stack Requirements</span><span>9</span></li>
+                <li class="toc-sub"><span>4.1 Software Requirements</span><span>9</span></li>
+                <li class="toc-sub"><span>4.2 Hardware Requirements</span><span>9</span></li>
+                <li><span>5. Project Architecture</span><span>10</span></li>
+                <li><span>6. Dashboard Modules Required</span><span>11</span></li>
+                <li><span>7. Data Privacy &amp; Compliance</span><span>12</span></li>
+                <li><span>8. Minimum Viable Product (MVP) Checklist</span><span>12</span></li>
+                <li><span>9. Suggested Timeline</span><span>13</span></li>
+            </ol>
+        </div>
+
+        <!-- ===== SECTION 1 ===== -->
+        <h1>1. Data Requirements</h1>
+        <p>Your project requires <strong>three major categories</strong> of data. Below is a detailed breakdown of every
+            field needed to build the alumni database, train ML/DL models, and power the analytics dashboard.</p>
+
+        <h2>1.1 Student Academic Data (Core Database)</h2>
+        <p>This is the foundation of your system. You need records for all <strong>BS, MS, PhD</strong> students in
+            <strong>Business Analytics</strong> and <strong>Project Management</strong>.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>student_id</code></td>
+                    <td>String (PK)</td>
+                    <td>Unique identifier</td>
+                    <td><code>BA-BS-2020-001</code></td>
+                </tr>
+                <tr>
+                    <td><code>full_name</code></td>
+                    <td>String</td>
+                    <td>Student's full name</td>
+                    <td><code>Ahmed Khan</code></td>
+                </tr>
+                <tr>
+                    <td><code>email</code></td>
+                    <td>String</td>
+                    <td>Contact email</td>
+                    <td><code>ahmed@email.com</code></td>
+                </tr>
+                <tr>
+                    <td><code>phone</code></td>
+                    <td>String</td>
+                    <td>Contact number</td>
+                    <td><code>+92-300-XXXXXXX</code></td>
+                </tr>
+                <tr>
+                    <td><code>profile_photo_url</code></td>
+                    <td>String</td>
+                    <td>LinkedIn / Profile photo</td>
+                    <td>URL</td>
+                </tr>
+                <tr>
+                    <td><code>program</code></td>
+                    <td>Enum</td>
+                    <td>Business Analytics / Project Management</td>
+                    <td><code>Business Analytics</code></td>
+                </tr>
+                <tr>
+                    <td><code>degree_level</code></td>
+                    <td>Enum</td>
+                    <td>BS / MS / PhD</td>
+                    <td><code>BS</code></td>
+                </tr>
+                <tr>
+                    <td><code>enrollment_year</code></td>
+                    <td>Integer</td>
+                    <td>Year of admission</td>
+                    <td><code>2020</code></td>
+                </tr>
+                <tr>
+                    <td><code>graduation_year</code></td>
+                    <td>Integer</td>
+                    <td>Year of graduation</td>
+                    <td><code>2024</code></td>
+                </tr>
+                <tr>
+                    <td><code>graduation_status</code></td>
+                    <td>Enum</td>
+                    <td>Graduated / Enrolled / Dropped</td>
+                    <td><code>Graduated</code></td>
+                </tr>
+                <tr>
+                    <td><code>cgpa</code></td>
+                    <td>Float</td>
+                    <td>Cumulative GPA (0-4.0)</td>
+                    <td><code>3.45</code></td>
+                </tr>
+                <tr>
+                    <td><code>semester_wise_gpa</code></td>
+                    <td>JSON/Array</td>
+                    <td>GPA for each semester</td>
+                    <td><code>[3.2, 3.5, 3.6, ...]</code></td>
+                </tr>
+                <tr>
+                    <td><code>thesis_title</code></td>
+                    <td>String</td>
+                    <td>For MS/PhD students</td>
+                    <td><code>"ML in Supply Chain"</code></td>
+                </tr>
+                <tr>
+                    <td><code>thesis_supervisor</code></td>
+                    <td>String</td>
+                    <td>Supervisor name</td>
+                    <td><code>Dr. Ali</code></td>
+                </tr>
+                <tr>
+                    <td><code>total_credit_hours</code></td>
+                    <td>Integer</td>
+                    <td>Credits completed</td>
+                    <td><code>132</code></td>
+                </tr>
+                <tr>
+                    <td><code>batch</code></td>
+                    <td>String</td>
+                    <td>Batch identifier</td>
+                    <td><code>Fall 2020</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>1.2 Skills &amp; Competency Data</h2>
+        <p>This is <strong>critical for ML/DL prediction</strong>. You need to capture what skills each student acquired
+            during their studies.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>technical_skills</code></td>
+                    <td>Array</td>
+                    <td>Programming, tools, platforms</td>
+                    <td><code>["Python", "SQL", "Tableau", "Power BI"]</code></td>
+                </tr>
+                <tr>
+                    <td><code>soft_skills</code></td>
+                    <td>Array</td>
+                    <td>Communication, leadership, etc.</td>
+                    <td><code>["Leadership", "Team Management"]</code></td>
+                </tr>
+                <tr>
+                    <td><code>certifications</code></td>
+                    <td>Array of Objects</td>
+                    <td>Professional certifications</td>
+                    <td><code>[{"name": "PMP", "issuer": "PMI", "year": 2023}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>courses_taken</code></td>
+                    <td>Array of Objects</td>
+                    <td>Key courses with grades</td>
+                    <td><code>[{"course": "Data Mining", "grade": "A"}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>specialization_area</code></td>
+                    <td>String</td>
+                    <td>Focus area within program</td>
+                    <td><code>"Supply Chain Analytics"</code></td>
+                </tr>
+                <tr>
+                    <td><code>internship_experience</code></td>
+                    <td>Array of Objects</td>
+                    <td>Internships during studies</td>
+                    <td><code>[{"company": "ABC", "duration": "3 months", "role": "Data Analyst Intern"}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>projects_completed</code></td>
+                    <td>Array of Objects</td>
+                    <td>Academic / industry projects</td>
+                    <td><code>[{"title": "Sales Forecasting", "type": "Industry"}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>research_publications</code></td>
+                    <td>Integer</td>
+                    <td>Number of papers published</td>
+                    <td><code>2</code></td>
+                </tr>
+                <tr>
+                    <td><code>extracurricular_activities</code></td>
+                    <td>Array</td>
+                    <td>Societies, competitions, etc.</td>
+                    <td><code>["IEEE Member", "Hackathon Winner"]</code></td>
+                </tr>
+                <tr>
+                    <td><code>languages_known</code></td>
+                    <td>Array</td>
+                    <td>Programming &amp; spoken languages</td>
+                    <td><code>["Python", "R", "English", "Urdu"]</code></td>
+                </tr>
+                <tr>
+                    <td><code>tools_proficiency</code></td>
+                    <td>JSON</td>
+                    <td>Tool proficiency levels (1-5)</td>
+                    <td><code>{"Excel": 5, "Python": 4, "SPSS": 3}</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>1.3 Employment &amp; Career Data (Post-Graduation)</h2>
+        <p>This data is needed for the <strong>monitoring dashboard</strong> and serves as <strong>labels for your ML
+                models</strong>.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>employment_status</code></td>
+                    <td>Enum</td>
+                    <td>Employed / Unemployed / Self-Employed / Further Studies</td>
+                    <td><code>Employed</code></td>
+                </tr>
+                <tr>
+                    <td><code>current_company</code></td>
+                    <td>String</td>
+                    <td>Company name</td>
+                    <td><code>Systems Limited</code></td>
+                </tr>
+                <tr>
+                    <td><code>company_type</code></td>
+                    <td>Enum</td>
+                    <td>MNC / Startup / Government / NGO / Academic</td>
+                    <td><code>MNC</code></td>
+                </tr>
+                <tr>
+                    <td><code>company_industry</code></td>
+                    <td>String</td>
+                    <td>Industry sector</td>
+                    <td><code>IT &amp; Consulting</code></td>
+                </tr>
+                <tr>
+                    <td><code>job_title</code></td>
+                    <td>String</td>
+                    <td>Current designation</td>
+                    <td><code>Data Analyst</code></td>
+                </tr>
+                <tr>
+                    <td><code>job_level</code></td>
+                    <td>Enum</td>
+                    <td>Entry / Mid / Senior / Executive</td>
+                    <td><code>Entry</code></td>
+                </tr>
+                <tr>
+                    <td><code>monthly_salary_range</code></td>
+                    <td>Enum</td>
+                    <td>Salary bracket</td>
+                    <td><code>PKR 80K-120K</code></td>
+                </tr>
+                <tr>
+                    <td><code>employment_start_date</code></td>
+                    <td>Date</td>
+                    <td>When they started working</td>
+                    <td><code>2024-07-01</code></td>
+                </tr>
+                <tr>
+                    <td><code>time_to_first_job</code></td>
+                    <td>Integer</td>
+                    <td>Months after graduation to first job</td>
+                    <td><code>2</code></td>
+                </tr>
+                <tr>
+                    <td><code>job_location</code></td>
+                    <td>String</td>
+                    <td>City, Country</td>
+                    <td><code>Lahore, Pakistan</code></td>
+                </tr>
+                <tr>
+                    <td><code>is_job_relevant</code></td>
+                    <td>Boolean</td>
+                    <td>Is the job related to their degree?</td>
+                    <td><code>true</code></td>
+                </tr>
+                <tr>
+                    <td><code>linkedin_url</code></td>
+                    <td>String</td>
+                    <td>LinkedIn profile link</td>
+                    <td>URL</td>
+                </tr>
+                <tr>
+                    <td><code>career_history</code></td>
+                    <td>Array of Objects</td>
+                    <td>Previous positions</td>
+                    <td><code>[{"company": "XYZ", "role": "Intern", "duration": "6 months"}]</code></td>
+                </tr>
+                <tr>
+                    <td><code>employer_satisfaction</code></td>
+                    <td>Integer (1-5)</td>
+                    <td>Employer feedback if available</td>
+                    <td><code>4</code></td>
+                </tr>
+                <tr>
+                    <td><code>alumni_feedback</code></td>
+                    <td>Text</td>
+                    <td>Self-reported career satisfaction</td>
+                    <td><code>"Very satisfied..."</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <!-- ===== SECTION 2 ===== -->
+        <h1>2. Data Collection Methods</h1>
+
+        <div class="callout callout-important">
+            <div class="callout-title">⚠️ IMPORTANT — Minimum Data Requirements</div>
+            <p>You need at least <strong>200-500+ records</strong> for meaningful ML predictions. For deep learning, aim
+                for <strong>1000+ records</strong> or use data augmentation techniques (SMOTE, GANs).</p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                    <th>Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>University Records</td>
+                    <td>Academic data from the registrar / admin office</td>
+                    <td><span class="priority-must">🔴 Must Have</span></td>
+                </tr>
+                <tr>
+                    <td>Alumni Surveys</td>
+                    <td>Google Forms / Microsoft Forms for career data</td>
+                    <td><span class="priority-must">🔴 Must Have</span></td>
+                </tr>
+                <tr>
+                    <td>LinkedIn Scraping</td>
+                    <td>Extract current positions (with consent)</td>
+                    <td><span class="priority-nice">🟡 Nice to Have</span></td>
+                </tr>
+                <tr>
+                    <td>Department Records</td>
+                    <td>Course catalogs, skill mappings per course</td>
+                    <td><span class="priority-must">🔴 Must Have</span></td>
+                </tr>
+                <tr>
+                    <td>Employer Feedback</td>
+                    <td>Partner companies hiring your alumni</td>
+                    <td><span class="priority-optional">🟢 Optional</span></td>
+                </tr>
+                <tr>
+                    <td>Synthetic Data</td>
+                    <td>SMOTE / GAN-generated for model training</td>
+                    <td><span class="priority-nice">🟡 Nice to Have</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <!-- ===== SECTION 3 ===== -->
+        <h1>3. ML/DL Model Requirements</h1>
+
+        <h2>3.1 Prediction Tasks</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Type</th>
+                    <th>Input Features</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Employability Score</strong></td>
+                    <td>Regression</td>
+                    <td>Skills, CGPA, Projects, Certs</td>
+                    <td>Score (0-100%)</td>
+                </tr>
+                <tr>
+                    <td><strong>Job Placement Prediction</strong></td>
+                    <td>Classification</td>
+                    <td>Academic + Skill data</td>
+                    <td>Employed / Unemployed</td>
+                </tr>
+                <tr>
+                    <td><strong>Salary Range Prediction</strong></td>
+                    <td>Multi-class Classification</td>
+                    <td>All features</td>
+                    <td>Salary bracket</td>
+                </tr>
+                <tr>
+                    <td><strong>Time to Employment</strong></td>
+                    <td>Regression</td>
+                    <td>Skills, CGPA, Internships</td>
+                    <td>Months</td>
+                </tr>
+                <tr>
+                    <td><strong>Industry Sector Prediction</strong></td>
+                    <td>Multi-class Classification</td>
+                    <td>Specialization, Skills</td>
+                    <td>Industry type</td>
+                </tr>
+                <tr>
+                    <td><strong>Job Role Recommendation</strong></td>
+                    <td>Recommendation</td>
+                    <td>Skill profile</td>
+                    <td>Top-5 roles</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3.2 Recommended Models</h2>
+
+        <h3>Machine Learning Models</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Use Case</th>
+                    <th>Why</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Random Forest</strong></td>
+                    <td>Employability Classification</td>
+                    <td>Handles mixed features, interpretable</td>
+                </tr>
+                <tr>
+                    <td><strong>XGBoost / LightGBM</strong></td>
+                    <td>Salary &amp; Employability Prediction</td>
+                    <td>High accuracy on tabular data</td>
+                </tr>
+                <tr>
+                    <td><strong>Logistic Regression</strong></td>
+                    <td>Baseline binary classification</td>
+                    <td>Simple, interpretable baseline</td>
+                </tr>
+                <tr>
+                    <td><strong>SVM</strong></td>
+                    <td>Small dataset classification</td>
+                    <td>Works well with limited data</td>
+                </tr>
+                <tr>
+                    <td><strong>K-Nearest Neighbors</strong></td>
+                    <td>Job role matching</td>
+                    <td>Similarity-based recommendations</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Deep Learning Models</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Use Case</th>
+                    <th>Why</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Feed-Forward Neural Network (ANN)</strong></td>
+                    <td>Employability score prediction</td>
+                    <td>Captures non-linear patterns</td>
+                </tr>
+                <tr>
+                    <td><strong>LSTM / GRU</strong></td>
+                    <td>Career trajectory prediction</td>
+                    <td>Sequential semester data analysis</td>
+                </tr>
+                <tr>
+                    <td><strong>Autoencoders</strong></td>
+                    <td>Skill gap analysis</td>
+                    <td>Dimensionality reduction &amp; anomaly detection</td>
+                </tr>
+                <tr>
+                    <td><strong>Transformer-based (BERT)</strong></td>
+                    <td>Resume / feedback text analysis</td>
+                    <td>NLP on alumni feedback text</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3.3 Feature Engineering Requirements</h2>
+        <p>These are the key derived features that should be engineered from raw student data before feeding into
+            models:</p>
+
+        <div class="code-block">
+            <span class="tree-key">Key Derived Features:</span>
+            <span class="tree-branch">├──</span> <span class="tree-key">skill_diversity_score</span> <span
+                class="tree-arrow">→</span> <span class="tree-desc">Count of unique skill categories</span>
+            <span class="tree-branch">├──</span> <span class="tree-key">academic_consistency</span> <span
+                class="tree-arrow">→</span> <span class="tree-desc">Variance of semester GPAs</span>
+            <span class="tree-branch">├──</span> <span class="tree-key">practical_exposure</span> <span
+                class="tree-arrow">→</span> <span class="tree-desc">(Internships + Projects) weighted score</span>
+            <span class="tree-branch">├──</span> <span class="tree-key">certification_value</span> <span
+                class="tree-arrow">→</span> <span class="tree-desc">Weighted sum of certifications</span>
+            <span class="tree-branch">├──</span> <span class="tree-key">research_intensity</span> <span
+                class="tree-arrow">→</span> <span class="tree-desc">Publications / Years of study</span>
+            <span class="tree-branch">├──</span> <span class="tree-key">program_completion_rate</span> <span
+                class="tree-arrow">→</span> <span class="tree-desc">Credits completed / Required credits</span>
+            <span class="tree-branch">├──</span> <span class="tree-key">network_strength</span> <span
+                class="tree-arrow">→</span> <span class="tree-desc">Extracurricular + Online presence score</span>
+            <span class="tree-branch">└──</span> <span class="tree-key">industry_alignment</span> <span
+                class="tree-arrow">→</span> <span class="tree-desc">Skill match with industry demands</span>
+        </div>
+
+        <hr>
+
+        <!-- ===== SECTION 4 ===== -->
+        <h1>4. Technical Stack Requirements</h1>
+
+        <h2>4.1 Software Requirements</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Technology</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Frontend</strong></td>
+                    <td>React.js / Next.js</td>
+                    <td>Dashboard UI</td>
+                </tr>
+                <tr>
+                    <td><strong>Backend</strong></td>
+                    <td>Python (Flask / FastAPI) or Node.js</td>
+                    <td>API &amp; Business Logic</td>
+                </tr>
+                <tr>
+                    <td><strong>Database</strong></td>
+                    <td>PostgreSQL / MongoDB</td>
+                    <td>Student &amp; Alumni data storage</td>
+                </tr>
+                <tr>
+                    <td><strong>ML/DL Framework</strong></td>
+                    <td>scikit-learn, TensorFlow/Keras, PyTorch</td>
+                    <td>Model training</td>
+                </tr>
+                <tr>
+                    <td><strong>Data Processing</strong></td>
+                    <td>Pandas, NumPy</td>
+                    <td>Data cleaning &amp; transformation</td>
+                </tr>
+                <tr>
+                    <td><strong>Visualization</strong></td>
+                    <td>Chart.js, D3.js, Plotly</td>
+                    <td>Dashboard charts</td>
+                </tr>
+                <tr>
+                    <td><strong>Deployment</strong></td>
+                    <td>Docker + AWS / Heroku / Vercel</td>
+                    <td>Hosting</td>
+                </tr>
+                <tr>
+                    <td><strong>Version Control</strong></td>
+                    <td>Git + GitHub</td>
+                    <td>Code management</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>4.2 Hardware Requirements</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Minimum</th>
+                    <th>Recommended</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>RAM</strong></td>
+                    <td>8 GB</td>
+                    <td>16 GB</td>
+                </tr>
+                <tr>
+                    <td><strong>Storage</strong></td>
+                    <td>50 GB SSD</td>
+                    <td>100 GB SSD</td>
+                </tr>
+                <tr>
+                    <td><strong>GPU</strong></td>
+                    <td>Not required (for ML)</td>
+                    <td>NVIDIA GPU (for DL training)</td>
+                </tr>
+                <tr>
+                    <td><strong>CPU</strong></td>
+                    <td>Intel i5 / Ryzen 5</td>
+                    <td>Intel i7 / Ryzen 7</td>
+                </tr>
+                <tr>
+                    <td><strong>Internet</strong></td>
+                    <td>Required</td>
+                    <td>Stable broadband</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-tip">
+            <div class="callout-title">💡 TIP</div>
+            <p>Use <strong>Google Colab Pro</strong> or <strong>Kaggle Notebooks</strong> for free GPU access during DL
+                model training if you don't have a dedicated GPU.</p>
+        </div>
+
+        <hr>
+
+        <!-- ===== SECTION 5 ===== -->
+        <h1>5. Project Architecture</h1>
+        <p>The system follows a layered architecture with five distinct stages from data collection to dashboard
+            presentation.</p>
+
+        <div class="diagram-container">
+            <div class="diagram-title">System Architecture — Data Flow Diagram</div>
+            <div class="arch-flow">
+                <div class="arch-label">Stage 1: Data Collection</div>
+                <div class="arch-layer">
+                    <div class="arch-box collection">📋 University Records</div>
+                    <div class="arch-box collection">📝 Alumni Surveys</div>
+                    <div class="arch-box collection">🔗 LinkedIn Data</div>
+                </div>
+
+                <div class="arch-arrow">⬇</div>
+
+                <div class="arch-label">Stage 2: Data Processing</div>
+                <div class="arch-layer">
+                    <div class="arch-box processing">🧹 Data Cleaning &amp; Preprocessing</div>
+                    <div class="arch-box processing">⚙️ Feature Engineering</div>
+                    <div class="arch-box processing">📊 Training Dataset</div>
+                </div>
+
+                <div class="arch-arrow">⬇</div>
+
+                <div class="arch-label">Stage 3: ML/DL Pipeline</div>
+                <div class="arch-layer">
+                    <div class="arch-box ml">🧠 Model Training</div>
+                    <div class="arch-box ml">📈 Model Evaluation</div>
+                    <div class="arch-box ml">🏆 Best Model Selection</div>
+                    <div class="arch-box ml">🚀 Model API Deployment</div>
+                </div>
+
+                <div class="arch-arrow">⬇</div>
+
+                <div class="arch-label">Stage 4: Web Application</div>
+                <div class="arch-layer">
+                    <div class="arch-box web">🖥️ Backend API (FastAPI / Flask)</div>
+                    <div class="arch-box web">🌐 Frontend Dashboard (React)</div>
+                </div>
+
+                <div class="arch-arrow">⬇</div>
+
+                <div class="arch-label">Stage 5: Dashboard Features</div>
+                <div class="arch-layer">
+                    <div class="arch-box feature">Alumni Directory</div>
+                    <div class="arch-box feature">Employability Predictions</div>
+                    <div class="arch-box feature">Analytics &amp; Charts</div>
+                    <div class="arch-box feature">Skill Gap Analysis</div>
+                    <div class="arch-box feature">Geographic Map</div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- ===== SECTION 6 ===== -->
+        <h1>6. Dashboard Modules Required</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Module</th>
+                    <th>Description</th>
+                    <th>Key Visualizations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Overview Dashboard</strong></td>
+                    <td>High-level KPIs and stats</td>
+                    <td>Cards, Gauges, Summary charts</td>
+                </tr>
+                <tr>
+                    <td><strong>Alumni Directory</strong></td>
+                    <td>Searchable list of all alumni</td>
+                    <td>Table with filters &amp; search</td>
+                </tr>
+                <tr>
+                    <td><strong>Employability Predictor</strong></td>
+                    <td>Input student profile → Get prediction</td>
+                    <td>Form + Score gauge + Recommendations</td>
+                </tr>
+                <tr>
+                    <td><strong>Employment Analytics</strong></td>
+                    <td>Where alumni are working</td>
+                    <td>Bar charts, Pie charts, Maps</td>
+                </tr>
+                <tr>
+                    <td><strong>Skill Analytics</strong></td>
+                    <td>Most in-demand skills</td>
+                    <td>Word clouds, Heatmaps, Radar charts</td>
+                </tr>
+                <tr>
+                    <td><strong>Program Comparison</strong></td>
+                    <td>BS vs MS vs PhD outcomes</td>
+                    <td>Comparative bar charts</td>
+                </tr>
+                <tr>
+                    <td><strong>Geographic Distribution</strong></td>
+                    <td>Where alumni are located</td>
+                    <td>Interactive map</td>
+                </tr>
+                <tr>
+                    <td><strong>Trend Analysis</strong></td>
+                    <td>Year-over-year employment trends</td>
+                    <td>Line charts, Area charts</td>
+                </tr>
+                <tr>
+                    <td><strong>Admin Panel</strong></td>
+                    <td>Add / Edit / Delete alumni records</td>
+                    <td>CRUD interface</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <!-- ===== SECTION 7 ===== -->
+        <h1>7. Data Privacy &amp; Compliance</h1>
+
+        <div class="callout callout-warning">
+            <div class="callout-title">⚠️ WARNING — Personal Data Handling</div>
+            <p>Since you're handling personal data of students and alumni, you must ensure compliance with data
+                protection standards:</p>
+            <ul>
+                <li>Written consent from alumni for data collection</li>
+                <li>Data anonymization for model training</li>
+                <li>Secure storage with encryption</li>
+                <li>Role-based access control on the dashboard</li>
+                <li>Compliance with university data policies</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <!-- ===== SECTION 8 ===== -->
+        <h1>8. Minimum Viable Product (MVP) Checklist</h1>
+        <p>Complete these tasks to deliver a functional MVP of the system:</p>
+
+        <ul class="checklist">
+            <li>Collect academic data for at least 200 students across all programs</li>
+            <li>Design and distribute alumni survey form</li>
+            <li>Clean and preprocess collected data</li>
+            <li>Perform exploratory data analysis (EDA)</li>
+            <li>Engineer features from raw data</li>
+            <li>Train and compare at least 3 ML models</li>
+            <li>Train at least 1 DL model (ANN / LSTM)</li>
+            <li>Build REST API for model predictions</li>
+            <li>Design and develop the web dashboard</li>
+            <li>Integrate prediction API with dashboard</li>
+            <li>Test with real alumni data</li>
+            <li>Document the entire system</li>
+        </ul>
+
+        <hr>
+
+        <!-- ===== SECTION 9 ===== -->
+        <h1>9. Suggested Timeline</h1>
+        <p>A proposed 16-week development schedule for the entire project:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Phase</th>
+                    <th>Duration</th>
+                    <th>Activities</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Phase 1: Research &amp; Data Collection</strong></td>
+                    <td>Weeks 1–3</td>
+                    <td>Literature review, survey design, data gathering</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 2: Data Processing</strong></td>
+                    <td>Weeks 4–5</td>
+                    <td>Cleaning, EDA, feature engineering</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 3: Model Development</strong></td>
+                    <td>Weeks 6–9</td>
+                    <td>ML/DL model training, evaluation, tuning</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 4: Web Development</strong></td>
+                    <td>Weeks 10–13</td>
+                    <td>Dashboard design, API development</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 5: Integration &amp; Testing</strong></td>
+                    <td>Weeks 14–15</td>
+                    <td>End-to-end testing, bug fixes</td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 6: Documentation &amp; Defense</strong></td>
+                    <td>Week 16</td>
+                    <td>Report writing, presentation preparation</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ===== FOOTER ===== -->
+        <div class="page-footer">
+            <p><strong>AlumniInsight</strong> — Integrated Alumni Analytics and Employability Prediction System</p>
+            <p>Complete Data &amp; Project Requirements Document &bull; Version 1.0 &bull; April 2026</p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlumniInsight — Technology Stack Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1e293b;
+            line-height: 1.7;
+            padding: 48px 56px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media print {
+            body { padding: 24px 32px; }
+            .no-print { display: none !important; }
+            .page-break { page-break-before: always; }
+            table { page-break-inside: avoid; }
+            h2 { page-break-after: avoid; }
+        }
+
+        /* Print Button */
+        .print-bar {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            color: white; padding: 12px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+        }
+        .print-bar span { font-weight: 600; font-size: 14px; }
+        .print-btn {
+            background: white; color: #6366f1; border: none;
+            padding: 8px 24px; border-radius: 8px; font-weight: 600;
+            cursor: pointer; font-size: 14px; font-family: inherit;
+        }
+        .print-btn:hover { background: #f0f0ff; }
+
+        /* Header */
+        .report-header {
+            text-align: center; margin-bottom: 40px; padding-top: 48px;
+            border-bottom: 3px solid #6366f1; padding-bottom: 32px;
+        }
+        .report-header .logo-icon {
+            width: 64px; height: 64px; border-radius: 16px;
+            background: linear-gradient(135deg, #6366f1, #818cf8);
+            display: inline-flex; align-items: center; justify-content: center;
+            color: white; font-size: 28px; margin-bottom: 16px;
+        }
+        .report-header h1 { font-size: 28px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+        .report-header .subtitle { font-size: 15px; color: #6366f1; font-weight: 600; margin-bottom: 12px; }
+        .report-header .meta { font-size: 12px; color: #94a3b8; }
+
+        /* Section */
+        h2 {
+            font-size: 18px; font-weight: 700; color: #1e293b;
+            margin: 32px 0 16px; padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        h2 .icon {
+            width: 28px; height: 28px; border-radius: 6px;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: white; font-size: 13px; flex-shrink: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%; border-collapse: collapse; margin-bottom: 24px;
+            font-size: 13px;
+        }
+        thead th {
+            background: #f8fafc; color: #475569; font-weight: 600;
+            text-align: left; padding: 10px 14px; border-bottom: 2px solid #e2e8f0;
+            font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        tbody td {
+            padding: 10px 14px; border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+        tbody tr:hover { background: #fafbff; }
+        .tech-name { font-weight: 600; color: #6366f1; }
+        .tag {
+            display: inline-block; padding: 2px 8px; border-radius: 4px;
+            font-size: 11px; font-weight: 600;
+        }
+        .tag-frontend { background: #ede9fe; color: #7c3aed; }
+        .tag-backend { background: #dcfce7; color: #16a34a; }
+        .tag-db { background: #fef3c7; color: #d97706; }
+        .tag-ai { background: #fce7f3; color: #db2777; }
+
+        /* File table */
+        .file-table td:first-child { font-family: 'Courier New', monospace; font-size: 12px; font-weight: 600; color: #0f766e; }
+
+        /* Architecture box */
+        .arch-box {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 20px 24px; margin-bottom: 24px;
+        }
+        .arch-box h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #334155; }
+        .arch-item { display: flex; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+        .arch-label { font-weight: 600; color: #475569; min-width: 180px; }
+        .arch-value { color: #64748b; }
+
+        /* Flow diagram */
+        .flow {
+            display: flex; align-items: center; justify-content: center;
+            gap: 6px; margin: 20px 0; flex-wrap: wrap;
+        }
+        .flow-step {
+            background: #6366f1; color: white; padding: 6px 14px;
+            border-radius: 6px; font-size: 12px; font-weight: 600;
+        }
+        .flow-arrow { color: #94a3b8; font-size: 16px; }
+
+        /* Footer */
+        .report-footer {
+            margin-top: 40px; padding-top: 20px; border-top: 2px solid #e2e8f0;
+            text-align: center; font-size: 11px; color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Print Bar (hidden in print) -->
+    <div class="print-bar no-print">
+        <span>📄 Tech Stack Report — Ready to export</span>
+        <button class="print-btn" onclick="window.print()">⬇ Save as PDF</button>
+    </div>
+
+    <!-- Report Header -->
+    <div class="report-header">
+        <div class="logo-icon">🎓</div>
+        <h1>AlumniInsight</h1>
+        <div class="subtitle">Technology Stack & Architecture Report</div>
+        <div class="meta">
+            Integrated Alumni Analytics & Employability Prediction System<br>
+            Faculty of Management Sciences — IIUI<br>
+            Generated: May 9, 2026
+        </div>
+    </div>
+
+    <!-- 1. FRONTEND -->
+    <h2><span class="icon" style="background:#7c3aed">🖥</span> Frontend Technologies</h2>
+    <table>
+        <thead><tr><th>Technology</th><th>Version / Source</th><th>Purpose</th></tr></thead>
+        <tbody>
+            <tr><td class="tech-name">HTML5</td><td>Vanilla</td><td>Page structure, semantic markup, single-page app layout</td></tr>
+            <tr><td class="tech-name">CSS3</td><td>Vanilla (<code>styles.css</code>)</td><td>Design system — dark mode, glassmorphism, gradients, micro-animations, responsive layout</td></tr>
+            <tr><td class="tech-name">JavaScript (ES6+)</td><td>Vanilla</td><td>Client-side logic — DOM manipulation, OOP classes, async/await, event handling</td></tr>
+            <tr><td class="tech-name">Chart.js</td><td>v4.4.1 (CDN)</td><td>Data visualization — bar, doughnut, radar, polar area, and line charts</td></tr>
+            <tr><td class="tech-name">Font Awesome</td><td>v6.5.1 (CDN)</td><td>Icon system — 100+ icons across the dashboard UI</td></tr>
+            <tr><td class="tech-name">Google Fonts</td><td>Inter, JetBrains Mono</td><td>Typography — primary UI font and monospace for code/data</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 2. BACKEND -->
+    <h2><span class="icon" style="background:#16a34a">⚙</span> Backend Technologies</h2>
+    <table>
+        <thead><tr><th>Technology</th><th>Version / Source</th><th>Purpose</th></tr></thead>
+        <tbody>
+            <tr><td class="tech-name">Python</td><td>3.x</td><td>Backend programming language</td></tr>
+            <tr><td class="tech-name">FastAPI</td><td>Latest</td><td>REST API framework — async endpoints, auto-docs, CORS middleware</td></tr>
+            <tr><td class="tech-name">Uvicorn</td><td>Latest</td><td>ASGI web server for serving FastAPI application</td></tr>
+            <tr><td class="tech-name">Pydantic</td><td>v2.x</td><td>Request/response data validation and serialization (BaseModel)</td></tr>
+            <tr><td class="tech-name">HTTPX</td><td>Latest</td><td>Async HTTP client for Supabase REST API and Groq API calls</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 3. DATABASE -->
+    <h2><span class="icon" style="background:#d97706">🗄</span> Database & Backend-as-a-Service</h2>
+    <table>
+        <thead><tr><th>Technology</th><th>Purpose</th></tr></thead>
+        <tbody>
+            <tr><td class="tech-name">Supabase (PostgreSQL)</td><td>Cloud-hosted relational database — alumni & companies tables (~4,000 records)</td></tr>
+            <tr><td class="tech-name">Supabase JS SDK v2</td><td>Frontend client — real-time queries, filtering, pagination, CRUD operations</td></tr>
+            <tr><td class="tech-name">Supabase REST API</td><td>Backend data access from FastAPI <code>ml-service.py</code> via HTTPX</td></tr>
+            <tr><td class="tech-name">LocalStorage / SessionStorage</td><td>Client-side authentication session persistence and user data caching</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 4. AI/ML -->
+    <h2><span class="icon" style="background:#db2777">🤖</span> AI / Machine Learning</h2>
+    <table>
+        <thead><tr><th>Technology</th><th>Purpose</th></tr></thead>
+        <tbody>
+            <tr><td class="tech-name">Groq API (compound-beta)</td><td>Agentic AI assistant — intelligent chat, job market analysis, analytics widget generation</td></tr>
+            <tr><td class="tech-name">XGBoost</td><td>ML model for overall employability prediction (94.2% accuracy)</td></tr>
+            <tr><td class="tech-name">Random Forest</td><td>ML model for feature importance analysis (91.8% accuracy)</td></tr>
+            <tr><td class="tech-name">Neural Network (DL)</td><td>Deep Learning model for complex pattern recognition (93.5% accuracy)</td></tr>
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- 5. ARCHITECTURE -->
+    <h2><span class="icon" style="background:#0ea5e9">🏗</span> Architecture Overview</h2>
+    <div class="arch-box">
+        <h3>Design Patterns & Approach</h3>
+        <div class="arch-item"><span class="arch-label">Frontend Architecture:</span><span class="arch-value">Single-Page Application (SPA) — single index.html with JS-driven page routing</span></div>
+        <div class="arch-item"><span class="arch-label">Authentication:</span><span class="arch-value">Client-side RBAC via AuthManager class (SHA-256 hashing, localStorage)</span></div>
+        <div class="arch-item"><span class="arch-label">AI Integration:</span><span class="arch-value">Agentic RAG pattern — live data retrieval → context building → Groq reasoning</span></div>
+        <div class="arch-item"><span class="arch-label">API Design:</span><span class="arch-value">RESTful endpoints with FastAPI auto-documentation (OpenAPI/Swagger)</span></div>
+        <div class="arch-item"><span class="arch-label">Data Flow:</span><span class="arch-value">Supabase ↔ Frontend (JS SDK) + Supabase ↔ Backend (REST) ↔ Groq AI</span></div>
+        <div class="arch-item"><span class="arch-label">Deployment:</span><span class="arch-value">Local dev server (frontend) + Uvicorn on port 8000 (backend)</span></div>
+    </div>
+
+    <h3 style="font-size:14px;font-weight:700;color:#334155;margin-bottom:12px;">AI Assistant Data Flow</h3>
+    <div class="flow">
+        <span class="flow-step">User Query</span><span class="flow-arrow">→</span>
+        <span class="flow-step">agent.js</span><span class="flow-arrow">→</span>
+        <span class="flow-step">FastAPI /ask-agent</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Supabase (live data)</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Groq AI</span><span class="flow-arrow">→</span>
+        <span class="flow-step">Response</span>
+    </div>
+
+    <!-- 6. API ENDPOINTS -->
+    <h2><span class="icon" style="background:#f43f5e">🔌</span> API Endpoints (FastAPI)</h2>
+    <table>
+        <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th></tr></thead>
+        <tbody>
+            <tr><td><strong>GET</strong></td><td><code>/</code></td><td>Service health — returns name, version, status</td></tr>
+            <tr><td><strong>GET</strong></td><td><code>/health</code></td><td>Connectivity check — Supabase + Groq status</td></tr>
+            <tr><td><strong>POST</strong></td><td><code>/ask-agent</code></td><td>AI chat — fetches live data, sends to Groq, returns answer + reasoning</td></tr>
+            <tr><td><strong>GET</strong></td><td><code>/stats</code></td><td>Direct access to aggregated alumni statistics</td></tr>
+            <tr><td><strong>POST</strong></td><td><code>/scrape-jobs</code></td><td>Job market intelligence — skill gap analysis via Groq</td></tr>
+            <tr><td><strong>GET</strong></td><td><code>/analytics-widgets</code></td><td>AI-powered dashboard insight cards</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 7. PROJECT FILES -->
+    <h2><span class="icon" style="background:#0f766e">📁</span> Project File Structure</h2>
+    <table class="file-table">
+        <thead><tr><th>File</th><th>Lines</th><th>Role</th></tr></thead>
+        <tbody>
+            <tr><td>index.html</td><td>1,961</td><td>Full SPA markup — auth pages, dashboard, 10+ page sections, AI panel</td></tr>
+            <tr><td>styles.css</td><td>~3,000+</td><td>Complete design system — dark/light mode, glassmorphism, animations</td></tr>
+            <tr><td>app.js</td><td>1,930</td><td>Dashboard logic — charts, navigation, auth UI, profile, admin panel</td></tr>
+            <tr><td>auth.js</td><td>601</td><td>AuthManager class — login, registration, RBAC, session management</td></tr>
+            <tr><td>supabase.js</td><td>272</td><td>AlumniDB class — Supabase CRUD, queries, filters, CSV export</td></tr>
+            <tr><td>agent.js</td><td>543</td><td>AgentManager class — AI assistant panel, Groq integration, reasoning</td></tr>
+            <tr><td>scraper.js</td><td>497</td><td>JobMarketScraper class — job intel, analytics widgets, chart rendering</td></tr>
+            <tr><td>ml-service.py</td><td>587</td><td>FastAPI backend — Supabase aggregation, Groq AI endpoints, CORS</td></tr>
+        </tbody>
+    </table>
+
+    <!-- 8. EXTERNAL SERVICES -->
+    <h2><span class="icon" style="background:#8b5cf6">☁</span> External Services & CDNs</h2>
+    <table>
+        <thead><tr><th>Service</th><th>URL / Source</th><th>Usage</th></tr></thead>
+        <tbody>
+            <tr><td class="tech-name">Supabase Cloud</td><td>anxoxtavdydntwhavgdh.supabase.co</td><td>PostgreSQL database hosting + REST API</td></tr>
+            <tr><td class="tech-name">Groq Cloud API</td><td>api.groq.com</td><td>LLM inference — compound-beta model</td></tr>
+            <tr><td class="tech-name">jsDelivr CDN</td><td>cdn.jsdelivr.net</td><td>Chart.js + Supabase JS SDK delivery</td></tr>
+            <tr><td class="tech-name">cdnjs CDN</td><td>cdnjs.cloudflare.com</td><td>Font Awesome icon library</td></tr>
+            <tr><td class="tech-name">Google Fonts</td><td>fonts.googleapis.com</td><td>Inter & JetBrains Mono typefaces</td></tr>
+        </tbody>
+    </table>
+
+    <!-- Footer -->
+    <div class="report-footer">
+        <strong>AlumniInsight</strong> — Integrated Alumni Analytics & Employability Prediction System<br>
+        Faculty of Management Sciences, International Islamic University Islamabad<br>
+        Report generated on May 9, 2026 • Confidential
+    </div>
+
+</body>
+</html>
