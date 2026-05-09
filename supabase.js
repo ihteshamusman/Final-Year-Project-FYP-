@@ -166,49 +166,57 @@ class AlumniDB {
     // ==================== AGGREGATION QUERIES ====================
 
     /**
+     * Helper to fetch all distinct values for a given column by bypassing the 1000-row limit via pagination
+     */
+    async fetchDistinctValues(column) {
+        let allData = [];
+        let from = 0;
+        const limit = 1000;
+        
+        while (true) {
+            const { data, error } = await this.db
+                .from('alumni')
+                .select(column)
+                .not(column, 'is', null)
+                .range(from, from + limit - 1);
+            
+            if (error) return { data: [], error };
+            if (!data || data.length === 0) break;
+            
+            allData = allData.concat(data);
+            if (data.length < limit) break;
+            from += limit;
+        }
+        
+        const distinctValues = [...new Set(allData.map(r => r[column]))];
+        return { data: distinctValues, error: null };
+    }
+
+    /**
      * Get distinct graduation years for filter dropdown
      */
     async getGraduationYears() {
-        const { data, error } = await this.db
-            .from('alumni')
-            .select('graduation_year')
-            .not('graduation_year', 'is', null)
-            .order('graduation_year', { ascending: false })
-            .limit(10000);
-        
-        if (error) return { data: [], error };
-        const years = [...new Set(data.map(r => r.graduation_year))];
-        return { data: years, error: null };
+        const { data, error } = await this.fetchDistinctValues('graduation_year');
+        if (!error) data.sort((a, b) => b - a); // descending
+        return { data, error };
     }
 
     /**
      * Get distinct programs for filter dropdown
      */
     async getPrograms() {
-        const { data, error } = await this.db
-            .from('alumni')
-            .select('program')
-            .not('program', 'is', null)
-            .limit(10000);
-        
-        if (error) return { data: [], error };
-        const programs = [...new Set(data.map(r => r.program))].sort();
-        return { data: programs, error: null };
+        const { data, error } = await this.fetchDistinctValues('program');
+        if (!error) data.sort(); // ascending
+        return { data, error };
     }
 
     /**
      * Get distinct employment statuses
      */
     async getEmploymentStatuses() {
-        const { data, error } = await this.db
-            .from('alumni')
-            .select('employment_status')
-            .not('employment_status', 'is', null)
-            .limit(10000);
-        
-        if (error) return { data: [], error };
-        const statuses = [...new Set(data.map(r => r.employment_status))].sort();
-        return { data: statuses, error: null };
+        const { data, error } = await this.fetchDistinctValues('employment_status');
+        if (!error) data.sort(); // ascending
+        return { data, error };
     }
 
     /**
