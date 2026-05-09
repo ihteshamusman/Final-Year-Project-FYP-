@@ -6,7 +6,7 @@
 
 class JobMarketScraper {
     constructor() {
-        this.API_BASE = 'http://localhost:8000';
+        this.API_BASE = 'https://final-year-project-fyp-akgc.onrender.com';
         this.cachedResults = null;
         this.lastFetchTime = null;
         this.CACHE_DURATION = 5 * 60 * 1000; // 5 minutes

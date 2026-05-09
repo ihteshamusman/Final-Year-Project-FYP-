@@ -284,8 +284,7 @@ class AgentManager {
     // ==================== REASONING ENGINE (LIVE BACKEND) ====================
     async generateResponse(userInput) {
         const ctx = this.getContext();
-        const host = window.location.hostname || 'localhost';
-        const API_URL = `http://${host}:8000/ask-agent`;
+        const API_URL = "https://final-year-project-fyp-akgc.onrender.com/ask-agent";
 
         try {
             const resp = await fetch(API_URL, {
