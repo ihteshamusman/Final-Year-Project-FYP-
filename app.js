@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loginAlert.classList.add('hidden');
 
         const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
+        const password = document.getElementById('loginPassword').value.trim();
         const rememberMe = document.getElementById('rememberMe').checked;
 
         loginLoader.classList.remove('hidden');
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alumniLoginAlert.classList.add('hidden');
 
         const email = document.getElementById('alumniLoginEmail').value.trim();
-        const password = document.getElementById('alumniLoginPassword').value;
+        const password = document.getElementById('alumniLoginPassword').value.trim();
         const rememberMe = document.getElementById('alumniRememberMe').checked;
 
         alumniLoginLoader.classList.remove('hidden');
@@ -447,6 +447,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mobile menu
     mobileMenuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('mobile-open');
+    });
+
+    // ==================== ALUMNI DIRECTORY ACTIONS ====================
+    // Select All
+    const selectAllBtn = document.getElementById('selectAllAlumni');
+    if (selectAllBtn) {
+        selectAllBtn.addEventListener('change', (e) => {
+            const checkboxes = document.querySelectorAll('.alumni-checkbox');
+            checkboxes.forEach(cb => cb.checked = e.target.checked);
+        });
+    }
+
+    // Chart View Toggles (Bar/Line)
+    document.querySelectorAll('.chart-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const view = btn.dataset.view;
+            const card = btn.closest('.chart-card');
+            const canvas = card.querySelector('canvas');
+            if (!canvas) return;
+            
+            const chartId = canvas.id;
+            // Find the corresponding chart instance
+            const instance = Object.values(chartInstances).find(inst => inst.canvas.id === chartId);
+            
+            if (instance) {
+                instance.config.type = view;
+                instance.update();
+                
+                // Toggle active class
+                card.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+        });
     });
 
     // Theme toggle
@@ -1308,21 +1341,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const isAdmin = authManager.isAdmin();
         currentPage = page;
 
+        // Reset select all checkbox
+        const selectAllBtn = document.getElementById('selectAllAlumni');
+        if (selectAllBtn) selectAllBtn.checked = false;
+
         // Update alumniDB pageSize from dropdown
         alumniDB.pageSize = getPageSize();
 
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-spinner fa-spin"></i> Loading from database...</td></tr>';
+        const colCount = isAdmin ? 13 : 11;
+        tbody.innerHTML = `<tr><td colspan="${colCount}" style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-spinner fa-spin"></i> Loading from database...</td></tr>`;
 
         const filters = getFilters();
         const { data, count, error } = await alumniDB.getAlumni(filters, page);
 
         if (error) {
-            tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:32px;color:#f43f5e"><i class="fas fa-exclamation-triangle"></i> Error loading data</td></tr>';
+            tbody.innerHTML = `<tr><td colspan="${colCount}" style="text-align:center;padding:32px;color:#f43f5e"><i class="fas fa-exclamation-triangle"></i> Error loading data</td></tr>`;
             console.error('Supabase error:', error);
             return;
         }
         if (!data.length) {
-            tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-search"></i> No alumni found matching filters</td></tr>';
+            tbody.innerHTML = `<tr><td colspan="${colCount}" style="text-align:center;padding:32px;color:var(--text-muted)"><i class="fas fa-search"></i> No alumni found matching filters</td></tr>`;
             updatePagination(0, page);
             return;
         }
@@ -1333,13 +1371,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusClass = a.employment_status === 'Employed' ? 'status-employed' :
                 a.employment_status === 'Seeking Employment' ? 'status-unemployed' : 'status-studies';
             const companyName = a.companies?.company_name || '—';
+            
+            // Derived Admission Year (approximate)
+            const duration = a.degree_level === 'BS' ? 4 : a.degree_level === 'MS' ? 2 : 3;
+            const admissionYear = a.graduation_year ? (a.graduation_year - duration) : '—';
 
             return `<tr data-id="${a.student_id}">
-                <td><input type="checkbox"></td>
+                <td><input type="checkbox" class="alumni-checkbox" data-id="${a.student_id}"></td>
                 <td><div class="alumni-cell">
                     <div class="alumni-avatar-mini" style="background:linear-gradient(135deg,${color},${color}88)">${initials}</div>
-                    <div class="alumni-name-cell"><strong>${a.full_name}</strong><small>${a.email}</small></div>
+                    <div class="alumni-name-cell"><strong>${a.full_name}</strong></div>
                 </div></td>
+                <td>${a.email || '—'}</td>
+                <td>${admissionYear}</td>
                 <td>${a.program || '—'}</td>
                 <td>${a.degree_level || '—'}</td>
                 <td>${a.graduation_year || '—'}</td>
@@ -1350,12 +1394,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="admin-only-col">${a.phone || '—'}</td>
                 <td><div class="action-btns">
                     <button class="action-btn view-alumni-btn" title="View" data-id="${a.student_id}"><i class="fas fa-eye"></i></button>
-                    ${isAdmin ? `<button class="action-btn delete-alumni-btn danger" title="Delete" data-id="${a.student_id}"><i class="fas fa-trash"></i></button>` : ''}
+                    ${isAdmin ? `<button class="action-btn edit-alumni-btn" title="Edit" data-id="${a.student_id}"><i class="fas fa-pen"></i></button>
+                    <button class="action-btn delete-alumni-btn danger" title="Delete" data-id="${a.student_id}"><i class="fas fa-trash"></i></button>` : ''}
                 </div></td>
             </tr>`;
         }).join('');
 
         updatePagination(count, page);
+
+        // Bind edit buttons
+        tbody.querySelectorAll('.edit-alumni-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.id;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                const { data: a, error } = await alumniDB.getAlumniById(id);
+                btn.innerHTML = '<i class="fas fa-pen"></i>';
+                if (error || !a) { alert('Error fetching record: ' + (error?.message || 'Unknown error')); return; }
+
+                const editIdInput = document.getElementById('editAlumniId');
+                if (editIdInput) editIdInput.value = a.student_id;
+                
+                const origEmailInput = document.getElementById('editAlumniOriginalEmail');
+                if (origEmailInput) origEmailInput.value = a.email || '';
+                
+                document.getElementById('alumniName').value = a.full_name || '';
+                document.getElementById('alumniEmail').value = a.email || '';
+                
+                const user = typeof authManager !== 'undefined' ? authManager.findUserByEmail(a.email || '') : null;
+                const personalEmailEl = document.getElementById('alumniPersonalEmail');
+                if (personalEmailEl) personalEmailEl.value = user ? (user.personalEmail || '') : '';
+                
+                const phoneEl = document.getElementById('alumniPhone');
+                if (phoneEl) phoneEl.value = a.phone || '';
+                
+                document.getElementById('alumniProgram').value = a.program || '';
+                document.getElementById('alumniDegree').value = a.degree_level || '';
+                document.getElementById('alumniGradYear').value = a.graduation_year || '';
+                document.getElementById('alumniCGPA').value = a.cgpa || '';
+                
+                const statusEl = document.getElementById('alumniStatus');
+                if (statusEl) statusEl.value = a.employment_status || '';
+                
+                const jobTitleEl = document.getElementById('alumniJobTitle');
+                if (jobTitleEl) jobTitleEl.value = a.job_title || '';
+                
+                const linkedInEl = document.getElementById('alumniLinkedIn');
+                if (linkedInEl) linkedInEl.value = a.linkedin_url || '';
+
+                const modalTitle = document.getElementById('addAlumniModalTitle');
+                if (modalTitle) modalTitle.innerHTML = '<i class="fas fa-user-edit"></i> Edit Alumni';
+                
+                const pwInput = document.getElementById('alumniPassword');
+                if (pwInput) {
+                    pwInput.required = false;
+                    pwInput.placeholder = "Leave blank to keep current";
+                    pwInput.value = '';
+                }
+                
+                document.getElementById('addAlumniModal').classList.remove('hidden');
+            });
+        });
 
         // Bind delete buttons
         tbody.querySelectorAll('.delete-alumni-btn').forEach(btn => {
@@ -1363,8 +1461,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!confirm('Are you sure you want to delete this alumni record?')) return;
                 const id = btn.dataset.id;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                // Get the email first to delete from auth
+                const { data: a } = await alumniDB.getAlumniById(id);
+                const email = a?.email;
+                const personalEmail = a?.personal_email;
+
                 const { error } = await alumniDB.deleteAlumni(id);
-                if (error) { alert('Delete failed: ' + error.message); return; }
+                if (error) { 
+                    alert('Delete failed: ' + error.message); 
+                    btn.innerHTML = '<i class="fas fa-trash"></i>';
+                    return; 
+                }
+
+                // Clean up auth too
+                if (email) authManager.deleteUserByEmail(email);
+                if (personalEmail) authManager.deleteUserByEmail(personalEmail);
+
                 renderAlumniTable(currentPage);
             });
         });
@@ -1705,8 +1818,98 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const program = document.getElementById('alumniProgram').value;
             const degree = document.getElementById('alumniDegree').value;
+
+            const editId = document.getElementById('editAlumniId')?.value;
+            const isEdit = !!editId;
+
+            // Create or update Auth User for portal access
+            const password = document.getElementById('alumniPassword').value.trim();
+            const session = authManager.getCurrentSession();
+            
+            if (!isEdit) {
+                const authRecord = {
+                    fullName: document.getElementById('alumniName').value.trim(),
+                    email: document.getElementById('alumniEmail').value.trim(),
+                    personalEmail: document.getElementById('alumniPersonalEmail').value.trim(),
+                    password: password,
+                    contactNumber: document.getElementById('alumniPhone')?.value.trim() || '+92-000-0000000',
+                    role: 'alumni',
+                    program: program,
+                    degree: degree,
+                    graduationYear: document.getElementById('alumniGradYear').value || '',
+                    admissionYear: document.getElementById('alumniAdmissionYear')?.value || '',
+                    cgpa: document.getElementById('alumniCGPA').value || '',
+                    jobTitle: document.getElementById('alumniJobTitle')?.value.trim() || '',
+                    linkedIn: document.getElementById('alumniLinkedIn')?.value.trim() || ''
+                };
+                let authResult = await authManager.adminCreateUser(authRecord, session);
+                if (!authResult.success) {
+                    // Check if it's an orphaned email issue (email exists in auth but record was deleted from alumni DB)
+                    if (authResult.error.toLowerCase().includes('exists')) {
+                        if (confirm(`Notice: An account with this email already exists in the portal's security database (likely from a previously deleted record).\n\nWould you like to RESET it and link it to this new record?`)) {
+                            // Purge the orphaned auth accounts
+                            authManager.deleteUserByEmail(authRecord.email);
+                            authManager.deleteUserByEmail(authRecord.personalEmail);
+                            // Retry creation
+                            authResult = await authManager.adminCreateUser(authRecord, session);
+                        }
+                    }
+
+                    if (!authResult.success) {
+                        alert('Error creating portal access: ' + authResult.error);
+                        submitBtn.innerHTML = origText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                }
+            } else {
+                // If editing, check if they want to update password or email in auth
+                const currentEmail = document.getElementById('alumniEmail').value.trim();
+                const originalEmail = document.getElementById('editAlumniOriginalEmail')?.value || currentEmail;
+                
+                let user = authManager.findUserByEmail(originalEmail);
+                if (!user && currentEmail !== originalEmail) {
+                    user = authManager.findUserByEmail(currentEmail);
+                }
+
+                if (user) {
+                    const updates = {
+                        fullName: document.getElementById('alumniName').value.trim(),
+                        email: currentEmail, // Admin can update email
+                        personalEmail: document.getElementById('alumniPersonalEmail').value.trim(),
+                        contactNumber: document.getElementById('alumniPhone')?.value.trim() || user.contactNumber,
+                        program: program,
+                        degree: degree,
+                        graduationYear: document.getElementById('alumniGradYear').value || user.graduationYear,
+                        cgpa: document.getElementById('alumniCGPA').value || user.cgpa,
+                        jobTitle: document.getElementById('alumniJobTitle')?.value.trim() || user.jobTitle,
+                        linkedIn: document.getElementById('alumniLinkedIn')?.value.trim() || user.linkedIn
+                    };
+                    const updateRes = await authManager.updateProfile(user.id, updates);
+                    if (updateRes.success && password) {
+                        await authManager.changePassword(user.id, null, password); 
+                    }
+                } else {
+                    // Auto-create auth user if it doesn't exist during edit
+                    const authRecord = {
+                        fullName: document.getElementById('alumniName').value.trim(),
+                        email: currentEmail,
+                        personalEmail: document.getElementById('alumniPersonalEmail').value.trim(),
+                        password: password || 'Alumni@2026',
+                        contactNumber: document.getElementById('alumniPhone')?.value.trim() || '+92-000-0000000',
+                        role: 'alumni',
+                        program: program,
+                        degree: degree,
+                        graduationYear: document.getElementById('alumniGradYear').value || '',
+                        cgpa: document.getElementById('alumniCGPA').value || '',
+                        jobTitle: document.getElementById('alumniJobTitle')?.value.trim() || '',
+                        linkedIn: document.getElementById('alumniLinkedIn')?.value.trim() || ''
+                    };
+                    await authManager.adminCreateUser(authRecord, session);
+                }
+            }
+
             const record = {
-                student_id: alumniDB.generateStudentId(program, degree),
                 full_name: document.getElementById('alumniName').value.trim(),
                 email: document.getElementById('alumniEmail').value.trim(),
                 phone: document.getElementById('alumniPhone')?.value.trim() || null,
@@ -1719,17 +1922,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 linkedin_url: document.getElementById('alumniLinkedIn')?.value.trim() || null,
             };
 
-            const { data, error } = await alumniDB.addAlumni(record);
+            let error;
+            if (isEdit) {
+                const result = await alumniDB.updateAlumni(editId, record);
+                error = result.error;
+            } else {
+                record.student_id = alumniDB.generateStudentId(program, degree);
+                const result = await alumniDB.addAlumni(record);
+                error = result.error;
+            }
+            
             submitBtn.innerHTML = origText;
             submitBtn.disabled = false;
 
             if (error) {
-                alert('Error adding alumni: ' + error.message);
+                alert(`Error ${isEdit ? 'updating' : 'adding'} alumni: ` + error.message);
             } else {
+                if(document.getElementById('editAlumniId')) document.getElementById('editAlumniId').value = '';
+                if(document.getElementById('editAlumniOriginalEmail')) document.getElementById('editAlumniOriginalEmail').value = '';
                 addAlumniForm.reset();
                 document.getElementById('addAlumniModal').classList.add('hidden');
                 renderAlumniTable(1);
-                alert('✅ Alumni record added successfully!');
+                alert(`✅ Alumni record ${isEdit ? 'updated' : 'added'} successfully!`);
             }
         });
     }
@@ -1739,6 +1953,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminAddBtn = document.getElementById('adminAddAlumniBtn');
     if (adminAddBtn) {
         adminAddBtn.addEventListener('click', () => {
+            const editIdInput = document.getElementById('editAlumniId');
+            if (editIdInput) editIdInput.value = '';
+            document.getElementById('addAlumniForm')?.reset();
+            
+            const modalTitle = document.getElementById('addAlumniModalTitle');
+            if(modalTitle) modalTitle.innerHTML = '<i class="fas fa-user-plus"></i> Add New Alumni';
+            
+            const pwInput = document.getElementById('alumniPassword');
+            if(pwInput) {
+                pwInput.required = true;
+                pwInput.placeholder = "Set temporary password";
+            }
+            
             document.getElementById('addAlumniModal')?.classList.remove('hidden');
         });
     }
@@ -2022,5 +2249,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial render of dot
         renderNotifications();
+
+        // Contact Office Form
+        const contactForm = document.getElementById('contactOfficeForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = contactForm.querySelector('button');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    alert('✅ Your message has been sent to the Alumni Office. We will get back to you soon!');
+                    contactForm.reset();
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 1500);
+            });
+        }
     }
 });

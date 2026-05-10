@@ -133,6 +133,18 @@ class AlumniDB {
     }
 
     /**
+     * Delete all alumni in a specific program
+     */
+    async deleteAlumniByProgram(program) {
+        if (!program || program === 'all') return { error: { message: 'Please select a specific program' } };
+        const { data, error } = await this.db
+            .from('alumni')
+            .delete()
+            .eq('program', program);
+        return { data, error };
+    }
+
+    /**
      * Get a single alumni by student_id
      */
     async getAlumniById(studentId) {

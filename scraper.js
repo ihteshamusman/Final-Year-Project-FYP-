@@ -139,7 +139,7 @@ class JobMarketScraper {
                     </div>
                 </div>
                 <button class="btn btn-outline btn-sm" onclick="jobScraper.renderAnalyticsWidgets()" title="Refresh AI Insights">
-                    <i class="fas fa-sync-alt"></i> Refresh
+                    <i class="fas fa-sync-alt"></i>
                 </button>
             </div>
             <div class="ai-widgets-grid">

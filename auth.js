@@ -102,7 +102,12 @@ class AuthManager {
     }
 
     findUserByEmail(email) {
-        return this.getUsers().find(u => u.email.toLowerCase() === email.toLowerCase());
+        if (!email) return null;
+        const cleanEmail = email.trim().toLowerCase();
+        return this.getUsers().find(u => 
+            (u.email && u.email.toLowerCase() === cleanEmail) || 
+            (u.personalEmail && u.personalEmail.toLowerCase() === cleanEmail)
+        );
     }
 
     findUserById(id) {
@@ -171,8 +176,8 @@ class AuthManager {
         }
 
         // Check duplicate email
-        if (this.findUserByEmail(userData.email)) {
-            return { success: false, error: 'An account with this email already exists.' };
+        if (this.findUserByEmail(userData.email) || this.findUserByEmail(userData.personalEmail)) {
+            return { success: false, error: 'An account with one of these emails already exists.' };
         }
 
         // Validate password strength
@@ -437,8 +442,7 @@ class AuthManager {
 
         // Alumni restricted pages
         const alumniAllowed = [
-            'dashboard', 'alumni', 'predictor', 'employment',
-            'skills', 'geographic', 'trends', 'programs', 'profile'
+            'dashboard', 'predictor', 'profile', 'contact'
         ];
         return alumniAllowed.includes(pageName);
     }
@@ -588,6 +592,21 @@ class AuthManager {
 
         const users = this.getUsers();
         const filtered = users.filter(u => u.id !== userId);
+        if (filtered.length === users.length) {
+            return { success: false, error: 'User not found.' };
+        }
+        this.saveUsers(filtered);
+        return { success: true };
+    }
+
+    deleteUserByEmail(email) {
+        if (!email) return { success: false, error: 'Email required.' };
+        const users = this.getUsers();
+        const cleanEmail = email.trim().toLowerCase();
+        const filtered = users.filter(u => 
+            (u.email && u.email.toLowerCase() !== cleanEmail) && 
+            (u.personalEmail && u.personalEmail.toLowerCase() !== cleanEmail)
+        );
         if (filtered.length === users.length) {
             return { success: false, error: 'User not found.' };
         }

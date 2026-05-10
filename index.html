@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="Integrated Alumni Analytics and Employability Prediction System - Monitor alumni careers and predict employability using ML/DL techniques">
-    <title>AlumniInsight | Analytics & Employability Prediction Dashboard</title>
+    <title>IIUI AlumniInsight | Analytics & Employability Prediction</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -235,8 +235,8 @@
                         <i class="fas fa-graduation-cap"></i>
                     </div>
                     <div class="logo-text">
-                        <h1>AlumniInsight</h1>
-                        <span>Analytics Platform</span>
+                        <h1>IIUI Alumni</h1>
+                        <span>Insights & Analytics</span>
                     </div>
                 </div>
                 <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
@@ -251,7 +251,7 @@
                         <i class="fas fa-chart-pie"></i>
                         <span>Dashboard</span>
                     </a>
-                    <a href="#" class="nav-item" data-page="alumni" id="nav-alumni">
+                    <a href="#" class="nav-item admin-only" data-page="alumni" id="nav-alumni">
                         <i class="fas fa-users"></i>
                         <span>Alumni Directory</span>
                     </a>
@@ -262,7 +262,7 @@
                     </a>
                 </div>
 
-                <div class="nav-section">
+                <div class="nav-section admin-only">
                     <span class="nav-section-title">Analytics</span>
                     <a href="#" class="nav-item" data-page="employment" id="nav-employment">
                         <i class="fas fa-briefcase"></i>
@@ -289,7 +289,7 @@
 
                 <div class="nav-section">
                     <span class="nav-section-title">Management</span>
-                    <a href="#" class="nav-item" data-page="programs" id="nav-programs">
+                    <a href="#" class="nav-item admin-only" data-page="programs" id="nav-programs">
                         <i class="fas fa-layer-group"></i>
                         <span>Program Comparison</span>
                     </a>
@@ -297,7 +297,17 @@
                         <i class="fas fa-id-card"></i>
                         <span>My Profile</span>
                     </a>
-                    <a href="#" class="nav-item admin-only-nav" data-page="admin" id="nav-admin">
+                </div>
+
+                <div class="nav-section alumni-only">
+                    <span class="nav-section-title">Support</span>
+                    <a href="#" class="nav-item" data-page="contact" id="nav-contact">
+                        <i class="fas fa-headset"></i>
+                        <span>Contact Alumni Office</span>
+                    </a>
+                </div>
+                <div class="nav-section admin-only">
+                    <a href="#" class="nav-item" data-page="admin" id="nav-admin">
                         <i class="fas fa-cog"></i>
                         <span>Admin Panel</span>
                         <span class="nav-badge admin-badge">Admin</span>
@@ -370,14 +380,14 @@
             <section class="page active" id="page-dashboard">
                 <div class="page-header">
                     <div>
-                        <h2 class="page-title">Dashboard Overview</h2>
-                        <p class="page-subtitle">Real-time alumni analytics and employability insights</p>
+                        <h2 class="page-title">IIUI Alumni Dashboard</h2>
+                        <p class="page-subtitle">Welcome to the International Islamic University alumni analytics portal</p>
                     </div>
                     <div class="page-actions">
                         <select class="filter-select" id="dashboardYearFilter">
                             <option value="all">All Years</option>
                         </select>
-                        <button class="btn btn-primary" id="exportDashboard">
+                        <button class="btn btn-primary admin-only" id="exportDashboard">
                             <i class="fas fa-download"></i> Export Report
                         </button>
                     </div>
@@ -435,7 +445,7 @@
                 </div>
 
                 <!-- AI Analytics Widgets (Groq-powered) -->
-                <div id="analyticsWidgetGrid" class="analytics-widget-section">
+                <div id="analyticsWidgetGrid" class="analytics-widget-section admin-only">
                     <!-- Populated dynamically by scraper.js -->
                 </div>
 
@@ -705,6 +715,8 @@
                             <tr>
                                 <th><input type="checkbox" id="selectAllAlumni"></th>
                                 <th>Alumni</th>
+                                <th>University Email</th>
+                                <th>Admission</th>
                                 <th>Program</th>
                                 <th>Degree</th>
                                 <th>Graduation</th>
@@ -804,9 +816,7 @@
                                 <label>Technical Skills</label>
                                 <div class="skill-tags-input">
                                     <div class="skill-tags" id="techSkillTags">
-                                        <span class="skill-tag">Python <button class="tag-remove">×</button></span>
-                                        <span class="skill-tag">SQL <button class="tag-remove">×</button></span>
-                                        <span class="skill-tag">Power BI <button class="tag-remove">×</button></span>
+                                        <!-- User added skills will appear here -->
                                     </div>
                                     <input type="text" placeholder="Type a skill and press Enter..." class="tag-input"
                                         id="techSkillInput">
@@ -1818,17 +1828,84 @@
                     </div>
                 </div>
             </section>
+            <!-- ==================== CONTACT ALUMNI OFFICE PAGE ==================== -->
+            <section class="page alumni-only" id="page-contact">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Contact Alumni Office</h2>
+                        <p class="page-subtitle">Get in touch with the International Islamic University Alumni Department</p>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Send us a Message</h3>
+                        </div>
+                        <form id="contactOfficeForm" style="display: flex; flex-direction: column; gap: 20px; padding: 20px;">
+                            <div class="form-group">
+                                <label for="contactSubject">Subject (Optional)</label>
+                                <input type="text" id="contactSubject" class="form-input" placeholder="What is this regarding?">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Message</label>
+                                <textarea id="contactMessage" class="form-input" rows="6" placeholder="How can we help you today?" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="align-self: flex-start;">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Office Information</h3>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 24px; padding: 20px;">
+                            <div style="display: flex; gap: 16px; align-items: center;">
+                                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(6, 182, 212, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-primary);">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 style="color: var(--text-primary); margin-bottom: 4px;">Location</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">Room 204, Administration Block, IIUI Sector H-10, Islamabad</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 16px; align-items: center;">
+                                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(6, 182, 212, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-primary);">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 style="color: var(--text-primary); margin-bottom: 4px;">Phone</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">+92 051 9019065</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 16px; align-items: center;">
+                                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(6, 182, 212, 0.1); display: flex; align-items: center; justify-content: center; color: var(--accent-primary);">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 style="color: var(--text-primary); margin-bottom: 4px;">Email</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">alumni.office@iiu.edu.pk</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
-        <!-- Add Alumni Modal -->
+        <!-- Add/Edit Alumni Modal -->
         <div class="modal-overlay hidden" id="addAlumniModal">
             <div class="modal">
                 <div class="modal-header">
-                    <h3><i class="fas fa-user-plus"></i> Add New Alumni</h3>
+                    <h3 id="addAlumniModalTitle"><i class="fas fa-user-plus"></i> Add New Alumni</h3>
                     <button class="modal-close" id="closeModal">×</button>
                 </div>
                 <div class="modal-body">
                     <form id="addAlumniForm">
+                        <input type="hidden" id="editAlumniId" value="">
+                        <input type="hidden" id="editAlumniOriginalEmail" value="">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="alumniName">Full Name *</label>
@@ -1837,6 +1914,14 @@
                             <div class="form-group">
                                 <label for="alumniEmail">University Email *</label>
                                 <input type="email" id="alumniEmail" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniPersonalEmail">Personal Email *</label>
+                                <input type="email" id="alumniPersonalEmail" class="form-input" required placeholder="For portal access">
+                            </div>
+                            <div class="form-group">
+                                <label for="alumniPassword">Login Password *</label>
+                                <input type="text" id="alumniPassword" class="form-input" required placeholder="Set temporary password">
                             </div>
                             <div class="form-group">
                                 <label for="alumniPhone">Phone Number</label>
@@ -1854,18 +1939,23 @@
                                     <option value="Public Admin">Public Admin</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="alumniDegree">Degree Level *</label>
-                                <select id="alumniDegree" class="form-input" required>
-                                    <option value="">Select Degree</option>
-                                    <option value="BS">BS</option>
-                                    <option value="MS">MS</option>
-                                    <option value="PhD">PhD</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="alumniGradYear">Graduation Year</label>
-                                <input type="number" id="alumniGradYear" class="form-input" min="2010" max="2030">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="alumniDegree">Degree Level *</label>
+                                    <select id="alumniDegree" class="form-input" required>
+                                        <option value="BS">BS</option>
+                                        <option value="MS">MS</option>
+                                        <option value="PhD">PhD</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="alumniAdmissionYear">Admission Year</label>
+                                    <input type="number" id="alumniAdmissionYear" class="form-input" placeholder="e.g. 2020">
+                                </div>
+                                <div class="form-group">
+                                    <label for="alumniGradYear">Graduation Year *</label>
+                                    <input type="number" id="alumniGradYear" class="form-input" required placeholder="e.g. 2024">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="alumniCGPA">CGPA</label>
@@ -1905,7 +1995,7 @@
 
         <!-- ==================== AGENTIC AI ASSISTANT ==================== -->
         <!-- Floating Action Button -->
-        <button class="ai-fab" id="aiAssistantFab" title="AI Assistant">
+        <button class="ai-fab admin-only" id="aiAssistantFab" title="AI Assistant">
             <div class="ai-fab-icon">
                 <i class="fas fa-robot"></i>
             </div>

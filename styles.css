@@ -100,7 +100,7 @@ body {
     color: var(--text-primary);
     display: flex;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: auto; /* Enable horizontal scrolling if content overflows */
     -webkit-font-smoothing: antialiased;
 }
 
@@ -242,6 +242,14 @@ body::before {
     overflow-y: auto;
 }
 
+.role-alumni .admin-only {
+    display: none !important;
+}
+
+.role-admin .alumni-only {
+    display: none !important;
+}
+
 .nav-section {
     margin-bottom: 24px;
 }
@@ -352,7 +360,9 @@ body::before {
 .main-content {
     margin-left: var(--sidebar-width);
     flex: 1;
+    min-width: 0;
     min-height: 100vh;
+    overflow-x: auto; /* Ensure main content can be scrolled horizontally */
     transition: margin-left var(--transition-slow);
 }
 
@@ -1116,6 +1126,10 @@ body::before {
 }
 
 /* ==================== ALUMNI TABLE ==================== */
+#page-alumni {
+    padding-bottom: 120px;
+    zoom: 0.75; /* Set specific zoom for Alumni Directory to fit screen */
+}
 .filter-bar {
     display: flex;
     gap: 16px;
@@ -1146,7 +1160,8 @@ body::before {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-lg);
-    overflow: hidden;
+    overflow-x: auto;
+    max-width: 100%;
     backdrop-filter: blur(10px);
 }
 
@@ -1160,21 +1175,26 @@ body::before {
 }
 
 .data-table th {
-    padding: 14px 18px;
+    padding: 6px 8px;
     text-align: left;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.5px;
     border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
 }
 
 .data-table td {
-    padding: 14px 18px;
-    font-size: 0.85rem;
+    padding: 6px 8px;
+    font-size: 0.72rem;
     color: var(--text-secondary);
     border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .data-table tbody tr {
@@ -3067,6 +3087,18 @@ body::before {
 }
 
 body.role-admin .admin-only {
+    display: initial !important;
+}
+
+/* If it was a flex container, keep it flex */
+body.role-admin div.admin-only, 
+body.role-admin nav.admin-only,
+body.role-admin section.admin-only {
+    display: block !important;
+}
+
+body.role-admin a.admin-only,
+body.role-admin button.admin-only {
     display: inline-flex !important;
 }
 
@@ -3636,12 +3668,14 @@ body.role-admin .alumni-directory-notice {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.6;
     box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4), 0 0 0 0 rgba(99, 102, 241, 0.4);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ai-fab:hover {
     transform: scale(1.1);
+    opacity: 1;
     box-shadow: 0 12px 40px rgba(99, 102, 241, 0.5);
 }
 
