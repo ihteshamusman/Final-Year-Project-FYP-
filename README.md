@@ -4,7 +4,7 @@
 [![Backend Status](https://img.shields.io/badge/Service-Running-blue)](https://final-year-project-fyp-akgc.onrender.com)
 
 ## **📌 Business Case & Executive Summary**
-In the modern economy, the "Skill Gap" between university curricula and industry requirements is a multibillion-dollar inefficiency. **AlumniInsight** is an end-to-end Business Intelligence (BI) solution that utilizes **Agentic AI, Machine Learning (ML), and Deep Learning (DL)** to transform static alumni data into a dynamic roadmap for institutional excellence.
+In the modern economy, the "Skill Gap" between university curriculam and industry requirements is a multibillion-dollar inefficiency. **AlumniInsight** is an end-to-end Business Intelligence (BI) solution that utilizes **Agentic AI, Machine Learning (ML), and Deep Learning (DL)** to transform static alumni data into a dynamic roadmap for institutional excellence.
 
 As a **Business Analyst**, I developed this framework to move beyond traditional reporting, providing a 360-degree view of graduate success through a three-tier analytical lens.
 
