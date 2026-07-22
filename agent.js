@@ -14,54 +14,52 @@ class AgentManager {
         // Knowledge base built from dashboard data — Full FMS Faculty Scope
         this.knowledgeBase = {
             alumniStats: {
-                total: 3200,
-                employed: 2688,
-                selfEmployed: 176,
-                furtherStudies: 128,
-                unemployed: 208,
-                employmentRate: 84.0,
-                avgTimeToEmployment: 2.6,
-                partnerCompanies: 210
+                total: 213,
+                employed: 209,
+                selfEmployed: 5,
+                furtherStudies: 0,
+                unemployed: 4,
+                employmentRate: 98.1,
+                avgTimeToEmployment: 3.2,
+                partnerCompanies: 156
             },
             // FMS Organizational Hierarchy
             departments: [
                 {
                     name: 'Business Administration',
                     programs: ['BBA – 2 Years', 'BBA – 4 Years', 'BS Public Administration', 'MS Public Administration', 'PhD Public Administration', 'MBA – 2 Years', 'MBA – Executive'],
-                    alumniCount: 1120,
-                    employmentRate: 84.5
+                    alumniCount: 85,
+                    employmentRate: 97.6
                 },
                 {
                     name: 'Accounting, Finance & Commerce',
                     programs: ['BS Accounting & Finance', 'MS Accounting & Finance', 'PhD Accounting & Finance', 'BS Commerce', 'MS Commerce', 'PhD Commerce'],
-                    alumniCount: 960,
-                    employmentRate: 82.8
+                    alumniCount: 65,
+                    employmentRate: 98.0
                 },
                 {
                     name: 'Technology & Project Management',
                     programs: ['BS Business Analytics', 'MS Business Analytics', 'PhD Business Analytics', 'BS Fintech & E-Commerce', 'MS Fintech & E-Commerce', 'PhD Fintech & E-Commerce', 'BS Project Management', 'MS Project Management', 'PhD Project Management'],
-                    alumniCount: 1120,
-                    employmentRate: 86.2
+                    alumniCount: 63,
+                    employmentRate: 98.5
                 }
             ],
             topCompanies: [
-                { name: 'Systems Limited', count: 152, industry: 'IT & Tech' },
-                { name: 'HBL', count: 126, industry: 'Banking & Finance' },
-                { name: 'Nestle Pakistan', count: 112, industry: 'FMCG' },
-                { name: 'Engro Corporation', count: 101, industry: 'Manufacturing' },
-                { name: 'Jazz (PMCL)', count: 94, industry: 'Telecom' },
-                { name: 'Deloitte Pakistan', count: 88, industry: 'Consulting' },
-                { name: 'TPS Pakistan', count: 81, industry: 'IT & Tech' },
-                { name: 'Unilever Pakistan', count: 77, industry: 'FMCG' },
-                { name: 'State Bank of Pakistan', count: 69, industry: 'Government' },
-                { name: 'McKinsey & Company', count: 62, industry: 'Consulting' }
+                { name: 'FMS IIU', count: 11, industry: 'Education' },
+                { name: 'National Bank of Pakistan', count: 6, industry: 'Banking' },
+                { name: 'PTCL', count: 4, industry: 'Telecom' },
+                { name: 'Telenor Pakistan', count: 4, industry: 'Telecom' },
+                { name: 'Nayatel', count: 3, industry: 'Telecom' },
+                { name: 'NADRA', count: 3, industry: 'Government' },
+                { name: 'NBP Pakistan', count: 3, industry: 'Banking' },
+                { name: 'PIA', count: 3, industry: 'Aviation' },
+                { name: 'Bank Alfalah', count: 3, industry: 'Banking' },
+                { name: 'Standard Chartered Bank', count: 2, industry: 'Banking' }
             ],
             industryDistribution: {
-                'IT & Technology': 555, 'Banking & Finance': 512, 'Consulting': 416,
-                'FMCG': 331, 'Telecommunications': 256, 'Manufacturing': 213,
-                'FinTech': 160, 'Government': 139, 'Energy & Utilities': 117,
-                'Education': 107, 'NGO & Development': 96, 'Retail & E-Commerce': 85,
-                'Healthcare': 75, 'Textiles': 64, 'Media': 43, 'Other': 31
+                'Telecom': 15, 'Banking & Finance': 25, 'Education': 18,
+                'Government': 12, 'IT & Technology': 30, 'Consulting': 10,
+                'Aviation': 5, 'Other': 98
             },
             skills: {
                 topDemand: ['Python', 'SQL', 'Excel', 'Power BI', 'Financial Modeling', 'Data Analysis', 'Tableau', 'Agile/Scrum', 'SAP', 'Communication'],

@@ -442,7 +442,8 @@ class AuthManager {
 
         // Alumni restricted pages
         const alumniAllowed = [
-            'dashboard', 'predictor', 'profile', 'contact'
+            'dashboard', 'predictor', 'profile', 'contact',
+            'studentfeedback', 'alumnicommunity'
         ];
         return alumniAllowed.includes(pageName);
     }

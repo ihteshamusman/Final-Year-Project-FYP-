@@ -14,6 +14,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
@@ -280,11 +281,6 @@
                         <i class="fas fa-chart-line"></i>
                         <span>Trend Analysis</span>
                     </a>
-                    <a href="#" class="nav-item" data-page="jobmarket" id="nav-jobmarket">
-                        <i class="fas fa-satellite-dish"></i>
-                        <span>Job Market Intel</span>
-                        <span class="nav-badge" style="background:linear-gradient(135deg,#f43f5e,#fb7185)">Live</span>
-                    </a>
                 </div>
 
                 <div class="nav-section">
@@ -296,6 +292,20 @@
                     <a href="#" class="nav-item" data-page="profile" id="nav-profile">
                         <i class="fas fa-id-card"></i>
                         <span>My Profile</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Feedback &amp; Community</span>
+                    <a href="#" class="nav-item" data-page="studentfeedback" id="nav-studentfeedback">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Student Feedback</span>
+                        <span class="nav-badge" style="background:linear-gradient(135deg,#10b981,#34d399)">New</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="alumnicommunity" id="nav-alumnicommunity">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>Alumni Community</span>
+                        <span class="nav-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">New</span>
                     </a>
                 </div>
 
@@ -401,8 +411,8 @@
                         </div>
                         <div class="kpi-content">
                             <span class="kpi-label">Total Alumni</span>
-                            <span class="kpi-value" data-count="4000">0</span>
-                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> 4,000 total alumni</span>
+                            <span class="kpi-value" id="kpi-total-alumni">—</span>
+                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> Live database count</span>
                         </div>
                         <div class="kpi-sparkline" id="sparkline1"></div>
                     </div>
@@ -413,8 +423,8 @@
                         </div>
                         <div class="kpi-content">
                             <span class="kpi-label">Employment Rate</span>
-                            <span class="kpi-value">63.6<small>%</small></span>
-                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> 2,543 employed alumni</span>
+                            <span class="kpi-value" id="kpi-employment-rate">—</span>
+                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> Dynamic rate</span>
                         </div>
                         <div class="kpi-sparkline" id="sparkline2"></div>
                     </div>
@@ -425,8 +435,8 @@
                         </div>
                         <div class="kpi-content">
                             <span class="kpi-label">Avg. Time to Employment</span>
-                            <span class="kpi-value">6.5<small>months</small></span>
-                            <span class="kpi-change positive"><i class="fas fa-arrow-down"></i> Based on employed alumni</span>
+                            <span class="kpi-value" id="kpi-avg-time">—</span>
+                            <span class="kpi-change positive"><i class="fas fa-arrow-down"></i> Measured in months</span>
                         </div>
                         <div class="kpi-sparkline" id="sparkline3"></div>
                     </div>
@@ -437,8 +447,8 @@
                         </div>
                         <div class="kpi-content">
                             <span class="kpi-label">Partner Companies</span>
-                            <span class="kpi-value" data-count="100">0</span>
-                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> Across 8 industries</span>
+                            <span class="kpi-value" id="kpi-partner-companies">—</span>
+                            <span class="kpi-change positive"><i class="fas fa-arrow-up"></i> Registered employers</span>
                         </div>
                         <div class="kpi-sparkline" id="sparkline4"></div>
                     </div>
@@ -485,7 +495,7 @@
                             <h3>Top Hiring Companies</h3>
                         </div>
                         <div class="chart-body">
-                            <div class="company-list">
+                            <div class="company-list" id="topCompaniesList">
                                 <div class="company-item">
                                     <div class="company-rank">1</div>
                                     <div class="company-info">
@@ -567,7 +577,7 @@
                             <a href="#" class="view-all-link">View All →</a>
                         </div>
                         <div class="chart-body">
-                            <div class="activity-feed">
+                            <div class="activity-feed" id="recentActivityList">
                                 <div class="activity-item">
                                     <div class="activity-avatar"
                                         style="background: linear-gradient(135deg, #6366f1, #818cf8)">AK</div>
@@ -1141,67 +1151,8 @@
                         <div class="chart-header">
                             <h3>Alumni World Map</h3>
                         </div>
-                        <div class="chart-body">
-                            <div class="world-map-placeholder" id="worldMap">
-                                <div class="map-container">
-                                    <!-- Simplified SVG world map with dots -->
-                                    <svg viewBox="0 0 1000 500" class="world-svg">
-                                        <!-- Continents simplified outlines -->
-                                        <rect x="0" y="0" width="1000" height="500" fill="transparent" />
-                                        <!-- Location dots -->
-                                        <circle cx="235" cy="185" r="8" class="map-dot large" data-city="New York"
-                                            data-count="32">
-                                            <animate attributeName="r" values="8;12;8" dur="2s"
-                                                repeatCount="indefinite" />
-                                        </circle>
-                                        <circle cx="475" cy="165" r="6" class="map-dot medium" data-city="London"
-                                            data-count="18">
-                                            <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"
-                                                begin="0.3s" />
-                                        </circle>
-                                        <circle cx="500" cy="215" r="5" class="map-dot medium" data-city="Dubai"
-                                            data-count="45">
-                                            <animate attributeName="r" values="5;9;5" dur="2s" repeatCount="indefinite"
-                                                begin="0.6s" />
-                                        </circle>
-                                        <circle cx="560" cy="225" r="14" class="map-dot xlarge" data-city="Lahore"
-                                            data-count="890">
-                                            <animate attributeName="r" values="14;18;14" dur="2s"
-                                                repeatCount="indefinite" begin="0.1s" />
-                                        </circle>
-                                        <circle cx="570" cy="220" r="12" class="map-dot xlarge" data-city="Karachi"
-                                            data-count="520">
-                                            <animate attributeName="r" values="12;16;12" dur="2s"
-                                                repeatCount="indefinite" begin="0.4s" />
-                                        </circle>
-                                        <circle cx="555" cy="215" r="10" class="map-dot large" data-city="Islamabad"
-                                            data-count="340">
-                                            <animate attributeName="r" values="10;14;10" dur="2s"
-                                                repeatCount="indefinite" begin="0.7s" />
-                                        </circle>
-                                        <circle cx="680" cy="260" r="5" class="map-dot medium" data-city="Singapore"
-                                            data-count="12">
-                                            <animate attributeName="r" values="5;9;5" dur="2s" repeatCount="indefinite"
-                                                begin="0.9s" />
-                                        </circle>
-                                        <circle cx="815" cy="350" r="5" class="map-dot medium" data-city="Sydney"
-                                            data-count="8">
-                                            <animate attributeName="r" values="5;9;5" dur="2s" repeatCount="indefinite"
-                                                begin="0.5s" />
-                                        </circle>
-                                        <circle cx="250" cy="270" r="4" class="map-dot small" data-city="Toronto"
-                                            data-count="15">
-                                            <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"
-                                                begin="0.2s" />
-                                        </circle>
-                                        <circle cx="520" cy="195" r="4" class="map-dot small" data-city="Riyadh"
-                                            data-count="28">
-                                            <animate attributeName="r" values="4;8;4" dur="2s" repeatCount="indefinite"
-                                                begin="0.8s" />
-                                        </circle>
-                                    </svg>
-                                </div>
-                            </div>
+                        <div class="chart-body" style="padding: 0;">
+                            <div id="worldMap" style="height: 500px; width: 100%; border-radius: var(--border-radius-md);"></div>
                         </div>
                     </div>
 
@@ -1329,37 +1280,39 @@
 
                 <div class="comparison-grid">
                 <!-- Accounting & Finance -->
-                <div class="program-card">
+                <div class="program-card" data-program="Accounting & Finance">
                     <div class="program-card-header" style="background: linear-gradient(135deg, #f59e0b, #fbbf24)">
                         <i class="fas fa-coins"></i>
                         <h3>Accounting & Finance</h3>
                     </div>
                     <div class="program-card-body">
-                        <div class="program-stat">
-                            <span class="stat-label">Total Alumni</span>
-                            <span class="stat-value">664</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Employment Rate</span>
-                            <span class="stat-value text-success">61.9%</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Avg. CGPA</span>
-                            <span class="stat-value">3.12</span>
+                        <div class="program-stats-row">
+                            <div class="program-stat">
+                                <span class="stat-label">Total</span>
+                                <span class="stat-value">664</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">Employed</span>
+                                <span class="stat-value text-success">61.9%</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">CGPA</span>
+                                <span class="stat-value">3.12</span>
+                            </div>
                         </div>
                         <div class="degree-breakdown">
                             <h4>By Degree</h4>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="BS">
                                 <span>BS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 60.6%; background: linear-gradient(90deg, #f59e0b, #fbbf24)"></div></div>
                                 <span>60.6%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="MS">
                                 <span>MS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 67.3%; background: linear-gradient(90deg, #f59e0b, #fbbf24)"></div></div>
                                 <span>67.3%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="PhD">
                                 <span>PhD</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 56.1%; background: linear-gradient(90deg, #f59e0b, #fbbf24)"></div></div>
                                 <span>56.1%</span>
@@ -1369,37 +1322,39 @@
                 </div>
 
                 <!-- Business Admin -->
-                <div class="program-card">
+                <div class="program-card" data-program="Business Admin">
                     <div class="program-card-header" style="background: linear-gradient(135deg, #6366f1, #818cf8)">
                         <i class="fas fa-briefcase"></i>
                         <h3>Business Admin</h3>
                     </div>
                     <div class="program-card-body">
-                        <div class="program-stat">
-                            <span class="stat-label">Total Alumni</span>
-                            <span class="stat-value">690</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Employment Rate</span>
-                            <span class="stat-value text-success">64.3%</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Avg. CGPA</span>
-                            <span class="stat-value">3.10</span>
+                        <div class="program-stats-row">
+                            <div class="program-stat">
+                                <span class="stat-label">Total</span>
+                                <span class="stat-value">690</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">Employed</span>
+                                <span class="stat-value text-success">64.3%</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">CGPA</span>
+                                <span class="stat-value">3.10</span>
+                            </div>
                         </div>
                         <div class="degree-breakdown">
                             <h4>By Degree</h4>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="BS">
                                 <span>BS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 63.7%; background: linear-gradient(90deg, #6366f1, #818cf8)"></div></div>
                                 <span>63.7%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="MS">
                                 <span>MS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 66.9%; background: linear-gradient(90deg, #6366f1, #818cf8)"></div></div>
                                 <span>66.9%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="PhD">
                                 <span>PhD</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 60.0%; background: linear-gradient(90deg, #6366f1, #818cf8)"></div></div>
                                 <span>60.0%</span>
@@ -1409,37 +1364,39 @@
                 </div>
 
                 <!-- Business Analytics -->
-                <div class="program-card">
+                <div class="program-card" data-program="Business Analytics">
                     <div class="program-card-header ba-theme">
                         <i class="fas fa-chart-bar"></i>
                         <h3>Business Analytics</h3>
                     </div>
                     <div class="program-card-body">
-                        <div class="program-stat">
-                            <span class="stat-label">Total Alumni</span>
-                            <span class="stat-value">682</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Employment Rate</span>
-                            <span class="stat-value text-success">64.7%</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Avg. CGPA</span>
-                            <span class="stat-value">3.09</span>
+                        <div class="program-stats-row">
+                            <div class="program-stat">
+                                <span class="stat-label">Total</span>
+                                <span class="stat-value">682</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">Employed</span>
+                                <span class="stat-value text-success">64.7%</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">CGPA</span>
+                                <span class="stat-value">3.09</span>
+                            </div>
                         </div>
                         <div class="degree-breakdown">
                             <h4>By Degree</h4>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="BS">
                                 <span>BS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar ba" style="width: 65.5%"></div></div>
                                 <span>65.5%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="MS">
                                 <span>MS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar ba" style="width: 64.8%"></div></div>
                                 <span>64.8%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="PhD">
                                 <span>PhD</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar ba" style="width: 54.8%"></div></div>
                                 <span>54.8%</span>
@@ -1449,37 +1406,39 @@
                 </div>
 
                 <!-- Fintech -->
-                <div class="program-card">
+                <div class="program-card" data-program="Fintech">
                     <div class="program-card-header" style="background: linear-gradient(135deg, #ec4899, #f472b6)">
                         <i class="fas fa-microchip"></i>
                         <h3>Fintech</h3>
                     </div>
                     <div class="program-card-body">
-                        <div class="program-stat">
-                            <span class="stat-label">Total Alumni</span>
-                            <span class="stat-value">666</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Employment Rate</span>
-                            <span class="stat-value text-success">64.3%</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Avg. CGPA</span>
-                            <span class="stat-value">3.13</span>
+                        <div class="program-stats-row">
+                            <div class="program-stat">
+                                <span class="stat-label">Total</span>
+                                <span class="stat-value">666</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">Employed</span>
+                                <span class="stat-value text-success">64.3%</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">CGPA</span>
+                                <span class="stat-value">3.13</span>
+                            </div>
                         </div>
                         <div class="degree-breakdown">
                             <h4>By Degree</h4>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="BS">
                                 <span>BS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 64.9%; background: linear-gradient(90deg, #ec4899, #f472b6)"></div></div>
                                 <span>64.9%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="MS">
                                 <span>MS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 63.1%; background: linear-gradient(90deg, #ec4899, #f472b6)"></div></div>
                                 <span>63.1%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="PhD">
                                 <span>PhD</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 60.6%; background: linear-gradient(90deg, #ec4899, #f472b6)"></div></div>
                                 <span>60.6%</span>
@@ -1489,37 +1448,39 @@
                 </div>
 
                 <!-- Project Management -->
-                <div class="program-card">
+                <div class="program-card" data-program="Project Management">
                     <div class="program-card-header pm-theme">
                         <i class="fas fa-project-diagram"></i>
                         <h3>Project Management</h3>
                     </div>
                     <div class="program-card-body">
-                        <div class="program-stat">
-                            <span class="stat-label">Total Alumni</span>
-                            <span class="stat-value">654</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Employment Rate</span>
-                            <span class="stat-value text-success">61.3%</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Avg. CGPA</span>
-                            <span class="stat-value">3.09</span>
+                        <div class="program-stats-row">
+                            <div class="program-stat">
+                                <span class="stat-label">Total</span>
+                                <span class="stat-value">654</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">Employed</span>
+                                <span class="stat-value text-success">61.3%</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">CGPA</span>
+                                <span class="stat-value">3.09</span>
+                            </div>
                         </div>
                         <div class="degree-breakdown">
                             <h4>By Degree</h4>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="BS">
                                 <span>BS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar pm" style="width: 63.2%"></div></div>
                                 <span>63.2%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="MS">
                                 <span>MS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar pm" style="width: 57.7%"></div></div>
                                 <span>57.7%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="PhD">
                                 <span>PhD</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar pm" style="width: 51.4%"></div></div>
                                 <span>51.4%</span>
@@ -1529,37 +1490,39 @@
                 </div>
 
                 <!-- Public Admin -->
-                <div class="program-card">
+                <div class="program-card" data-program="Public Admin">
                     <div class="program-card-header" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa)">
                         <i class="fas fa-landmark"></i>
                         <h3>Public Admin</h3>
                     </div>
                     <div class="program-card-body">
-                        <div class="program-stat">
-                            <span class="stat-label">Total Alumni</span>
-                            <span class="stat-value">644</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Employment Rate</span>
-                            <span class="stat-value text-success">64.9%</span>
-                        </div>
-                        <div class="program-stat">
-                            <span class="stat-label">Avg. CGPA</span>
-                            <span class="stat-value">3.07</span>
+                        <div class="program-stats-row">
+                            <div class="program-stat">
+                                <span class="stat-label">Total</span>
+                                <span class="stat-value">644</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">Employed</span>
+                                <span class="stat-value text-success">64.9%</span>
+                            </div>
+                            <div class="program-stat">
+                                <span class="stat-label">CGPA</span>
+                                <span class="stat-value">3.07</span>
+                            </div>
                         </div>
                         <div class="degree-breakdown">
                             <h4>By Degree</h4>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="BS">
                                 <span>BS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 66.2%; background: linear-gradient(90deg, #8b5cf6, #a78bfa)"></div></div>
                                 <span>66.2%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="MS">
                                 <span>MS</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 62.2%; background: linear-gradient(90deg, #8b5cf6, #a78bfa)"></div></div>
                                 <span>62.2%</span>
                             </div>
-                            <div class="degree-row">
+                            <div class="degree-row" data-degree="PhD">
                                 <span>PhD</span>
                                 <div class="degree-bar-wrapper"><div class="degree-bar" style="width: 58.1%; background: linear-gradient(90deg, #8b5cf6, #a78bfa)"></div></div>
                                 <span>58.1%</span>
@@ -1641,48 +1604,193 @@
                 </div>
             </section>
 
-            <!-- ==================== JOB MARKET INTELLIGENCE PAGE ==================== -->
-            <section class="page" id="page-jobmarket">
+            <!-- ==================== STUDENT FEEDBACK PORTAL ==================== -->
+            <section class="page" id="page-studentfeedback">
                 <div class="page-header">
                     <div>
-                        <h2 class="page-title">Job Market Intelligence</h2>
-                        <p class="page-subtitle">AI-powered job market analysis & alumni skill gap detection</p>
+                        <h2 class="page-title">Student Internship & Job Feedback</h2>
+                        <p class="page-subtitle">Share your internship or job experience to help future students</p>
+                    </div>
+                </div>
+
+                <div class="feedback-layout">
+                    <!-- Feedback Form -->
+                    <div class="chart-card feedback-form-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-pen-fancy" style="margin-right:8px;color:var(--accent-primary)"></i>Submit Your Feedback</h3>
+                        </div>
+                        <form id="studentFeedbackForm" style="padding:24px;display:flex;flex-direction:column;gap:20px;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="sfName">Your Name</label>
+                                    <input type="text" id="sfName" class="form-input" placeholder="e.g., Ahmed Khan" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sfProgram">Program</label>
+                                    <select id="sfProgram" class="form-input" required>
+                                        <option value="">Select Program</option>
+                                        <option value="Project Management">Project Management</option>
+                                        <option value="Business Analytics">Business Analytics</option>
+                                        <option value="Business Admin">Business Admin</option>
+                                        <option value="Accounting & Finance">Accounting & Finance</option>
+                                        <option value="Fintech">Fintech</option>
+                                        <option value="Public Admin">Public Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="sfType">Experience Type</label>
+                                    <select id="sfType" class="form-input" required>
+                                        <option value="">Select Type</option>
+                                        <option value="Internship">Internship</option>
+                                        <option value="Full-Time Job">Full-Time Job</option>
+                                        <option value="Part-Time Job">Part-Time Job</option>
+                                        <option value="Freelance">Freelance</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sfCompany">Company / Organization</label>
+                                    <input type="text" id="sfCompany" class="form-input" placeholder="e.g., Systems Limited" required>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="sfRole">Role / Position</label>
+                                    <input type="text" id="sfRole" class="form-input" placeholder="e.g., Data Analyst Intern">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sfDuration">Duration</label>
+                                    <input type="text" id="sfDuration" class="form-input" placeholder="e.g., 3 months">
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="sfOverallExperience">How was your overall experience?</label>
+                                <div class="rating-stars" id="sfRating">
+                                    <i class="fas fa-star" data-rating="1"></i>
+                                    <i class="fas fa-star" data-rating="2"></i>
+                                    <i class="fas fa-star" data-rating="3"></i>
+                                    <i class="fas fa-star" data-rating="4"></i>
+                                    <i class="fas fa-star" data-rating="5"></i>
+                                    <span class="rating-text" id="sfRatingText">Select Rating</span>
+                                </div>
+                                <input type="hidden" id="sfRatingValue" value="0">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="sfExperience">Describe your experience in detail</label>
+                                <textarea id="sfExperience" class="form-input form-textarea" rows="4" placeholder="What did you learn? What tasks were you assigned? How was the work culture?" required></textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="sfSkillsLearned">Key Skills You Learned</label>
+                                <textarea id="sfSkillsLearned" class="form-input form-textarea" rows="3" placeholder="e.g., Power BI, SQL, Communication, Team Collaboration..."></textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="sfRecommendations">What should future students learn to adapt to the organization?</label>
+                                <textarea id="sfRecommendations" class="form-input form-textarea" rows="3" placeholder="e.g., Focus on Excel & data analysis before joining, learn professional email etiquette..."></textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="sfRequirements">What were the requirements/expectations from the organization?</label>
+                                <textarea id="sfRequirements" class="form-input form-textarea" rows="3" placeholder="e.g., Expected proficiency in Python, good presentation skills, willingness to work overtime..."></textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="sfAdvice">Any advice for fellow students?</label>
+                                <textarea id="sfAdvice" class="form-input form-textarea" rows="2" placeholder="e.g., Start networking early, focus on practical projects..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-large">
+                                <i class="fas fa-paper-plane"></i> Submit Feedback
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Recent Feedback Entries -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-comments" style="margin-right:8px;color:var(--accent-primary)"></i>Recent Feedback</h3>
+                        </div>
+                        <div class="feedback-entries" id="studentFeedbackEntries">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== ALUMNI COMMUNITY PORTAL ==================== -->
+            <section class="page" id="page-alumnicommunity">
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">Alumni Community Portal</h2>
+                        <p class="page-subtitle">Share feedback, post opportunities, and connect with fellow alumni</p>
                     </div>
                     <div class="page-actions">
-                        <div id="scraperLoadingIndicator" style="display:none;align-items:center;gap:8px;color:var(--text-muted);font-size:0.85rem">
-                            <i class="fas fa-spinner fa-spin"></i> Scanning market...
-                        </div>
-                        <button class="btn btn-primary" onclick="jobScraper.renderJobMarketPage()">
-                            <i class="fas fa-satellite-dish"></i> Scan Job Market
+                        <button class="btn btn-primary" id="newCommunityPostBtn">
+                            <i class="fas fa-plus"></i> New Post
                         </button>
                     </div>
                 </div>
-                <div id="jobMarketContent">
-                    <div class="job-market-intro">
-                        <div class="jm-intro-icon">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <h3>Ready to Analyze the Job Market</h3>
-                        <p>Click <strong>"Scan Job Market"</strong> to fetch real-time job data and compare it with alumni skills using Groq AI.</p>
-                        <div class="jm-intro-features">
-                            <div class="jm-feature">
-                                <i class="fas fa-search"></i>
-                                <span>Scrapes live job postings</span>
-                            </div>
-                            <div class="jm-feature">
-                                <i class="fas fa-brain"></i>
-                                <span>Groq AI summarizes trends</span>
-                            </div>
-                            <div class="jm-feature">
-                                <i class="fas fa-crosshairs"></i>
-                                <span>Compares alumni skills to market</span>
-                            </div>
-                            <div class="jm-feature">
-                                <i class="fas fa-lightbulb"></i>
-                                <span>Generates actionable insights</span>
-                            </div>
-                        </div>
+
+                <!-- Post Creation Form (hidden by default) -->
+                <div class="chart-card community-post-form hidden" id="communityPostForm">
+                    <div class="chart-header">
+                        <h3><i class="fas fa-edit" style="margin-right:8px;color:var(--accent-primary)"></i>Create a Post</h3>
+                        <button class="chart-btn" id="closeCommunityForm"><i class="fas fa-times"></i></button>
                     </div>
+                    <form id="alumniCommunityForm" style="padding:24px;display:flex;flex-direction:column;gap:20px;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="cpCategory">Post Category</label>
+                                <select id="cpCategory" class="form-input" required>
+                                    <option value="">Select Category</option>
+                                    <option value="feedback">General Feedback</option>
+                                    <option value="internship">Internship Opportunity</option>
+                                    <option value="job">Job Opening</option>
+                                    <option value="workshop">Workshop / Event</option>
+                                    <option value="advice">Career Advice</option>
+                                    <option value="achievement">Achievement / Milestone</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cpTitle">Post Title</label>
+                                <input type="text" id="cpTitle" class="form-input" placeholder="e.g., Data Analyst Internship at Systems Ltd" required>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="cpContent">Post Content</label>
+                            <textarea id="cpContent" class="form-input form-textarea" rows="5" placeholder="Share details about the opportunity, your feedback, or your experience..." required></textarea>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="cpCompany">Company / Organization (Optional)</label>
+                                <input type="text" id="cpCompany" class="form-input" placeholder="e.g., Nestle Pakistan">
+                            </div>
+                            <div class="form-group">
+                                <label for="cpLocation">Location (Optional)</label>
+                                <input type="text" id="cpLocation" class="form-input" placeholder="e.g., Islamabad, Pakistan">
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="cpContactInfo">Contact / Apply Link (Optional)</label>
+                            <input type="text" id="cpContactInfo" class="form-input" placeholder="e.g., hr@company.com or https://apply-link.com">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <i class="fas fa-paper-plane"></i> Publish Post
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="community-filter-bar">
+                    <button class="community-filter-btn active" data-filter="all">All Posts</button>
+                    <button class="community-filter-btn" data-filter="internship"><i class="fas fa-user-tie"></i> Internships</button>
+                    <button class="community-filter-btn" data-filter="job"><i class="fas fa-briefcase"></i> Jobs</button>
+                    <button class="community-filter-btn" data-filter="workshop"><i class="fas fa-chalkboard-teacher"></i> Workshops</button>
+                    <button class="community-filter-btn" data-filter="feedback"><i class="fas fa-comment"></i> Feedback</button>
+                    <button class="community-filter-btn" data-filter="advice"><i class="fas fa-lightbulb"></i> Advice</button>
+                    <button class="community-filter-btn" data-filter="achievement"><i class="fas fa-trophy"></i> Achievements</button>
+                </div>
+
+                <!-- Community Posts Feed -->
+                <div class="community-feed" id="communityFeed">
+                    <!-- Populated dynamically -->
                 </div>
             </section>
 
@@ -1723,108 +1831,113 @@
                         </div>
                     </div>
 
-                    <!-- Profile Edit Form -->
-                    <div class="profile-details-card">
-                        <div class="profile-section-header">
-                            <h3><i class="fas fa-user-edit"></i> Personal Information</h3>
-                            <button class="btn btn-outline btn-sm" id="editProfileBtn">
-                                <i class="fas fa-pen"></i> Edit
-                            </button>
-                        </div>
-
-                        <div class="auth-alert auth-alert-success hidden" id="profileSaveSuccess">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Profile updated successfully!</span>
-                        </div>
-                        <div class="auth-alert hidden" id="profileSaveError">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <span id="profileSaveErrorText">Error</span>
-                        </div>
-
-                        <form id="profileForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="profileFullName">Full Name</label>
-                                    <input type="text" id="profileFullName" class="form-input" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileUniEmail">University Email</label>
-                                    <input type="email" id="profileUniEmail" class="form-input" disabled>
-                                    <small class="field-hint">Contact admin to change university email</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profilePersonalEmail"><i class="fas fa-lock"
-                                            style="font-size:0.65rem;opacity:0.5"></i> Personal Email</label>
-                                    <input type="email" id="profilePersonalEmail" class="form-input" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileContact"><i class="fas fa-lock"
-                                            style="font-size:0.65rem;opacity:0.5"></i> Contact Number</label>
-                                    <input type="tel" id="profileContact" class="form-input" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileCompany">Current Company</label>
-                                    <input type="text" id="profileCompany" class="form-input" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileJobTitle">Job Title / Role</label>
-                                    <input type="text" id="profileJobTitle" class="form-input" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileProgram">Program</label>
-                                    <input type="text" id="profileProgram" class="form-input" disabled>
-                                    <small class="field-hint alumni-hint">Contact admin to update academic info</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileDegree">Degree</label>
-                                    <input type="text" id="profileDegree" class="form-input" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileLinkedIn">LinkedIn Profile</label>
-                                    <input type="url" id="profileLinkedIn" class="form-input" disabled
-                                        placeholder="https://linkedin.com/in/...">
-                                </div>
-                                <div class="form-group">
-                                    <label for="profileBio">Bio</label>
-                                    <textarea id="profileBio" class="form-input form-textarea" disabled
-                                        placeholder="Tell us about yourself..."></textarea>
-                                </div>
-                            </div>
-                            <div class="profile-form-actions hidden" id="profileFormActions">
-                                <button type="button" class="btn btn-outline" id="cancelProfileEdit">Cancel</button>
-                                <button type="submit" class="btn btn-primary" id="saveProfileBtn">
-                                    <i class="fas fa-save"></i> Save Changes
+                    <!-- Profile Details Area -->
+                    <div class="profile-details-wrapper" style="display: flex; flex-direction: column; gap: 24px; width: 100%;">
+                        <!-- Profile Edit Form Card -->
+                        <div class="profile-details-card">
+                            <div class="profile-section-header">
+                                <h3><i class="fas fa-user-edit"></i> Personal Information</h3>
+                                <button class="btn btn-outline btn-sm" id="editProfileBtn">
+                                    <i class="fas fa-pen"></i> Edit
                                 </button>
                             </div>
-                        </form>
 
-                        <!-- Change Password Section -->
-                        <div class="profile-section-header" style="margin-top: 32px;">
-                            <h3><i class="fas fa-key"></i> Change Password</h3>
-                        </div>
-                        <form id="changePasswordForm">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="currentPasswordProfile">Current Password</label>
-                                    <input type="password" id="currentPasswordProfile" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="newPasswordProfile">New Password</label>
-                                    <input type="password" id="newPasswordProfile" class="form-input" required>
-                                </div>
-                            </div>
-                            <div class="auth-alert hidden" id="passwordChangeError">
-                                <i class="fas fa-exclamation-circle"></i>
-                                <span id="passwordChangeErrorText"></span>
-                            </div>
-                            <div class="auth-alert auth-alert-success hidden" id="passwordChangeSuccess">
+                            <div class="auth-alert auth-alert-success hidden" id="profileSaveSuccess">
                                 <i class="fas fa-check-circle"></i>
-                                <span>Password changed successfully!</span>
+                                <span>Profile updated successfully!</span>
                             </div>
-                            <button type="submit" class="btn btn-outline" style="margin-top:12px">
-                                <i class="fas fa-key"></i> Update Password
-                            </button>
-                        </form>
+                            <div class="auth-alert hidden" id="profileSaveError">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <span id="profileSaveErrorText">Error</span>
+                            </div>
+
+                            <form id="profileForm">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="profileFullName">Full Name</label>
+                                        <input type="text" id="profileFullName" class="form-input" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileUniEmail">University Email</label>
+                                        <input type="email" id="profileUniEmail" class="form-input" disabled>
+                                        <small class="field-hint">Contact admin to change university email</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profilePersonalEmail"><i class="fas fa-lock"
+                                                style="font-size:0.65rem;opacity:0.5"></i> Personal Email</label>
+                                        <input type="email" id="profilePersonalEmail" class="form-input" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileContact"><i class="fas fa-lock"
+                                                style="font-size:0.65rem;opacity:0.5"></i> Contact Number</label>
+                                        <input type="tel" id="profileContact" class="form-input" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileCompany">Current Company</label>
+                                        <input type="text" id="profileCompany" class="form-input" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileJobTitle">Job Title / Role</label>
+                                        <input type="text" id="profileJobTitle" class="form-input" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileProgram">Program</label>
+                                        <input type="text" id="profileProgram" class="form-input" disabled>
+                                        <small class="field-hint alumni-hint">Contact admin to update academic info</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileDegree">Degree</label>
+                                        <input type="text" id="profileDegree" class="form-input" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileLinkedIn">LinkedIn Profile</label>
+                                        <input type="url" id="profileLinkedIn" class="form-input" disabled
+                                            placeholder="https://linkedin.com/in/...">
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="profileBio">Bio</label>
+                                        <textarea id="profileBio" class="form-input form-textarea" disabled
+                                            placeholder="Tell us about yourself..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="profile-form-actions hidden" id="profileFormActions">
+                                    <button type="button" class="btn btn-outline" id="cancelProfileEdit">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" id="saveProfileBtn">
+                                        <i class="fas fa-save"></i> Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Change Password Card -->
+                        <div class="profile-details-card">
+                            <div class="profile-section-header">
+                                <h3><i class="fas fa-key"></i> Security & Password</h3>
+                            </div>
+                            <form id="changePasswordForm">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="currentPasswordProfile">Current Password</label>
+                                        <input type="password" id="currentPasswordProfile" class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newPasswordProfile">New Password</label>
+                                        <input type="password" id="newPasswordProfile" class="form-input" required>
+                                    </div>
+                                </div>
+                                <div class="auth-alert hidden" id="passwordChangeError">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span id="passwordChangeErrorText"></span>
+                                </div>
+                                <div class="auth-alert auth-alert-success hidden" id="passwordChangeSuccess">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Password changed successfully!</span>
+                                </div>
+                                <button type="submit" class="btn btn-outline" style="margin-top:12px">
+                                    <i class="fas fa-key"></i> Update Password
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -2053,10 +2166,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="supabase.js"></script>
     <script src="auth.js"></script>
     <script src="app.js"></script>
-    <script src="scraper.js"></script>
     <script src="agent.js"></script>
 </body>
 

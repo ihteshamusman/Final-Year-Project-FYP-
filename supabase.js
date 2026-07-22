@@ -62,10 +62,13 @@ class AlumniDB {
     /**
      * Get dynamic KPI stats from database, optionally filtered by year
      */
-    async getDashboardStats(gradYear = 'all') {
-        let query = this.db.from('alumni').select('employment_status, graduation_year, program, degree_level, cgpa, time_to_first_job, monthly_salary_range, company_id');
+    async getDashboardStats(gradYear = 'all', program = 'all') {
+        let query = this.db.from('alumni').select('employment_status, graduation_year, program, degree_level, cgpa, time_to_first_job, monthly_salary_range, company_id, company_name');
         if (gradYear && gradYear !== 'all') {
             query = query.eq('graduation_year', parseInt(gradYear));
+        }
+        if (program && program !== 'all') {
+            query = query.eq('program', program);
         }
         const { data, error } = await query;
         if (error || !data) return { stats: null, error };
@@ -76,7 +79,11 @@ class AlumniDB {
         const pursuing = data.filter(a => a.employment_status === 'Pursuing Higher Education').length;
         const empRate = total > 0 ? ((employed / total) * 100).toFixed(1) : '0.0';
         const avgTime = data.filter(a => a.time_to_first_job).reduce((s, a) => s + a.time_to_first_job, 0) / (data.filter(a => a.time_to_first_job).length || 1);
-        const uniqueCompanies = new Set(data.filter(a => a.company_id).map(a => a.company_id)).size;
+        
+        // Count unique company IDs and names
+        const companyNames = data.filter(a => a.company_name).map(a => a.company_name.trim().toLowerCase());
+        const companyIds = data.filter(a => a.company_id).map(a => a.company_id);
+        const uniqueCompanies = new Set([...companyNames, ...companyIds]).size;
 
         // Per-program breakdown
         const programs = {};
@@ -184,22 +191,22 @@ class AlumniDB {
         let allData = [];
         let from = 0;
         const limit = 1000;
-        
+
         while (true) {
             const { data, error } = await this.db
                 .from('alumni')
                 .select(column)
                 .not(column, 'is', null)
                 .range(from, from + limit - 1);
-            
+
             if (error) return { data: [], error };
             if (!data || data.length === 0) break;
-            
+
             allData = allData.concat(data);
             if (data.length < limit) break;
             from += limit;
         }
-        
+
         const distinctValues = [...new Set(allData.map(r => r[column]))];
         return { data: distinctValues, error: null };
     }
@@ -270,7 +277,7 @@ class AlumniDB {
             a.graduation_year || '',
             a.cgpa || '',
             a.employment_status || '',
-            a.companies?.company_name || '',
+            a.company_name || a.companies?.company_name || '',
             a.job_title || '',
             a.monthly_salary_range || '',
         ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(','));
@@ -286,6 +293,51 @@ class AlumniDB {
         const year = new Date().getFullYear();
         const random = Math.floor(Math.random() * 9000) + 1000;
         return `${year}-FMS-${degreeLevel}-${random}`;
+    }
+
+    // ==================== FEEDBACK METHODS ====================
+
+    async getFeedbacks() {
+        const { data, error } = await this.db
+            .from('student_feedbacks')
+            .select('*')
+            .order('created_at', { ascending: false });
+        return { data: data || [], error };
+    }
+
+    async addFeedback(feedbackRecord) {
+        const { data, error } = await this.db
+            .from('student_feedbacks')
+            .insert([feedbackRecord])
+            .select();
+        return { data, error };
+    }
+
+    // ==================== COMMUNITY POSTS METHODS ====================
+
+    async getPosts() {
+        const { data, error } = await this.db
+            .from('community_posts')
+            .select('*')
+            .order('created_at', { ascending: false });
+        return { data: data || [], error };
+    }
+
+    async addPost(postRecord) {
+        const { data, error } = await this.db
+            .from('community_posts')
+            .insert([postRecord])
+            .select();
+        return { data, error };
+    }
+
+    async likePost(postId, currentLikes) {
+        const { data, error } = await this.db
+            .from('community_posts')
+            .update({ likes: (currentLikes || 0) + 1 })
+            .eq('id', postId)
+            .select();
+        return { data, error };
     }
 }
 

@@ -1,0 +1,21 @@
+Sheets in Excel file: ['Sheet1']
+
+--- Sheet: Sheet1 ---
+Shape: (214, 9)
+Columns: ['Contacted Alumni List November 2013', 'Unnamed: 1', 'Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5', 'Unnamed: 6', 'Unnamed: 7', 'Unnamed: 8']
+
+Sample Data (First 10 rows):
+  Contacted Alumni List November 2013             Unnamed: 1                 Unnamed: 2                  Unnamed: 3  Unnamed: 4                                                     Unnamed: 5    Unnamed: 6     Unnamed: 7      Unnamed: 8
+0                                 S/N                  Name                 Designation                     Company    Location                                                          Email        Mobile         Status  Final Response
+1                                   1    Shiekh Bilal Mujeeb       Relationship Manager                 Faisal Bank   Islamabad                                       bilalmujeebiiu@yahoo.com  0345-5107244      Available             yes
+2                                   2  Tassawar Rehman Aslam                          -                           -           -                                                              -  0333-5177864      Available             NaN
+3                                   3           Amjad Fareem                 Consultant              GHK Consulting   Islamabad                                          amjadfareem@gmail.com  0333-5693612      Available             yes
+4                                   4           Abdul Mateen           Junior Executive                       PIEAS  Rawalpindi                                           mateen2005@gmail.com  0342-5187216      Available              No
+5                                   5     Sameen Riaz Abbasi           Accounts Manager             Shaqurri & Sons   Islamabad                                                              -  0345-5033907      Available             NaN
+6                                   6       Syed Sohaib Shah              HR Consultant               United Pharma   Islamabad                                                              -  0333-5035030      Available             NaN
+7                                   7           Aamir Saleem  Assistant General Manager  Unitied Insurance Pakistan   Islamabad                                            aamir42@hotmail.com  0344-5510770      Available             yes
+8                                   8     Raheel Ahmad Malik       Relationship Manager     Standard Chartered Bank   Islamabad  raheel.ahmad.malik@gmail.com,raheelmalik@warid.blackberry.com  0300-5544200      Available             yes
+9                                   9       Aamir Khan Niazi                 HR Officer                 Sadiq Group  Rawalpindi                                      aamir.khan.iiui@gmail.com  0301-3958247  Not Contacted             yes
+
+==================================================
+
