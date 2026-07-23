@@ -43,11 +43,11 @@ class AuthManager {
             const alumniHash = await this.hashPassword('Alumni@123');
             const demoAlumni = {
                 id: this.generateId() + '_demo',
-                email: 'ahmed.k@university.edu',
+                email: 'ihteshamusman915@gmail.com',
                 passwordHash: alumniHash,
                 role: 'alumni',
                 fullName: 'Ahmed Khan',
-                personalEmail: 'ahmed.khan@gmail.com',
+                personalEmail: 'ihteshamusman915@gmail.com',
                 contactNumber: '+92-321-5551234',
                 program: 'ba',
                 degree: 'bs',
@@ -64,6 +64,17 @@ class AuthManager {
             };
 
             this.saveUsers([admin, demoAlumni]);
+        } else {
+            // Upgrade old demo account email if existing in localStorage
+            let updated = false;
+            users.forEach(u => {
+                if (u.role === 'alumni' && (u.email === 'ahmed.k@university.edu' || u.personalEmail === 'ahmed.khan@gmail.com')) {
+                    u.email = 'ihteshamusman915@gmail.com';
+                    u.personalEmail = 'ihteshamusman915@gmail.com';
+                    updated = true;
+                }
+            });
+            if (updated) this.saveUsers(users);
         }
 
         // Check remembered session
@@ -104,6 +115,14 @@ class AuthManager {
     findUserByEmail(email) {
         if (!email) return null;
         const cleanEmail = email.trim().toLowerCase();
+        // Allow matching either gmail.com or gmai.com for the demo account
+        if (cleanEmail === 'ihteshamusman915@gmail.com' || cleanEmail === 'ihteshamusman915@gmai.com') {
+            const demoMatch = this.getUsers().find(u => 
+                (u.email && u.email.toLowerCase().includes('ihteshamusman915')) || 
+                (u.personalEmail && u.personalEmail.toLowerCase().includes('ihteshamusman915'))
+            );
+            if (demoMatch) return demoMatch;
+        }
         return this.getUsers().find(u => 
             (u.email && u.email.toLowerCase() === cleanEmail) || 
             (u.personalEmail && u.personalEmail.toLowerCase() === cleanEmail)

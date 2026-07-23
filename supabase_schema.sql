@@ -44,9 +44,13 @@ CREATE TABLE IF NOT EXISTS community_posts (
 ALTER TABLE student_feedbacks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE community_posts ENABLE ROW LEVEL SECURITY;
 
--- 5. Allow anonymous read/write for new tables
+-- 5. Allow anonymous read/write/update/delete for new tables
 CREATE POLICY "anon_read_feedbacks" ON student_feedbacks FOR SELECT USING (true);
 CREATE POLICY "anon_insert_feedbacks" ON student_feedbacks FOR INSERT WITH CHECK (true);
+CREATE POLICY "anon_update_feedbacks" ON student_feedbacks FOR UPDATE USING (true);
+CREATE POLICY "anon_delete_feedbacks" ON student_feedbacks FOR DELETE USING (true);
+
 CREATE POLICY "anon_read_posts" ON community_posts FOR SELECT USING (true);
 CREATE POLICY "anon_insert_posts" ON community_posts FOR INSERT WITH CHECK (true);
 CREATE POLICY "anon_update_posts" ON community_posts FOR UPDATE USING (true);
+CREATE POLICY "anon_delete_posts" ON community_posts FOR DELETE USING (true);

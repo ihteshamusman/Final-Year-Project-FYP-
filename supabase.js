@@ -313,6 +313,23 @@ class AlumniDB {
         return { data, error };
     }
 
+    async updateFeedback(id, updatedFields) {
+        const { data, error } = await this.db
+            .from('student_feedbacks')
+            .update(updatedFields)
+            .eq('id', id)
+            .select();
+        return { data, error };
+    }
+
+    async deleteFeedback(id) {
+        const { data, error } = await this.db
+            .from('student_feedbacks')
+            .delete()
+            .eq('id', id);
+        return { data, error };
+    }
+
     // ==================== COMMUNITY POSTS METHODS ====================
 
     async getPosts() {
@@ -328,6 +345,23 @@ class AlumniDB {
             .from('community_posts')
             .insert([postRecord])
             .select();
+        return { data, error };
+    }
+
+    async updatePost(id, updatedFields) {
+        const { data, error } = await this.db
+            .from('community_posts')
+            .update(updatedFields)
+            .eq('id', id)
+            .select();
+        return { data, error };
+    }
+
+    async deletePost(id) {
+        const { data, error } = await this.db
+            .from('community_posts')
+            .delete()
+            .eq('id', id);
         return { data, error };
     }
 

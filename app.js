@@ -2851,7 +2851,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const stars = Array.from({ length: 5 }, (_, i) => `<i class="fas fa-star${i < fb.rating ? ' active' : ''}" style="color:${i < fb.rating ? '#f59e0b' : 'var(--border-color)'}"></i>`).join('');
             const timeAgo = getTimeAgo(fb.created_at || new Date());
 
-            return `<div class="feedback-entry">
+            return `<div class="feedback-entry" data-id="${fb.id}">
                 <div class="feedback-entry-header">
                     <div class="feedback-author">
                         <div class="feedback-avatar" style="background:linear-gradient(135deg,${color},${color}88)">${initials}</div>
@@ -2874,8 +2874,69 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${fb.requirements ? `<div class="feedback-section"><h5><i class="fas fa-clipboard-list"></i> Organization Requirements</h5><p>${fb.requirements}</p></div>` : ''}
                     ${fb.advice ? `<div class="feedback-section"><h5><i class="fas fa-lightbulb"></i> Advice for Students</h5><p>${fb.advice}</p></div>` : ''}
                 </div>
+                <div class="feedback-actions" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border-color);display:flex;gap:10px;justify-content:flex-end;">
+                    <button class="btn btn-outline btn-sm edit-feedback-btn" data-id="${fb.id}"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="btn btn-outline btn-sm delete-feedback-btn" data-id="${fb.id}" style="color:#f43f5e;border-color:rgba(244,63,94,0.3)"><i class="fas fa-trash-alt"></i> Delete</button>
+                </div>
             </div>`;
         }).join('');
+
+        // Edit Feedback Listener
+        container.querySelectorAll('.edit-feedback-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                const fb = feedbacks.find(item => String(item.id) === String(id));
+                if (!fb) return;
+
+                document.getElementById('sfName').value = fb.name || '';
+                document.getElementById('sfProgram').value = fb.program || '';
+                document.getElementById('sfType').value = fb.type || '';
+                document.getElementById('sfCompany').value = fb.company || '';
+                document.getElementById('sfRole').value = fb.role || '';
+                document.getElementById('sfDuration').value = fb.duration || '';
+                document.getElementById('sfExperience').value = fb.experience || '';
+                document.getElementById('sfSkillsLearned').value = fb.skills_learned || '';
+                document.getElementById('sfRecommendations').value = fb.recommendations || '';
+                document.getElementById('sfRequirements').value = fb.requirements || '';
+                document.getElementById('sfAdvice').value = fb.advice || '';
+
+                const rating = fb.rating || 5;
+                document.getElementById('sfRatingValue').value = rating;
+                const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+                document.getElementById('sfRatingText').textContent = ratingLabels[rating] || 'Select Rating';
+                if (sfRating) {
+                    sfRating.querySelectorAll('.fa-star').forEach((s, i) => {
+                        s.style.color = i < rating ? '#f59e0b' : 'var(--border-color)';
+                    });
+                }
+
+                studentFeedbackForm.dataset.editId = id;
+                const submitBtn = studentFeedbackForm.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Feedback';
+
+                studentFeedbackForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
+
+        // Delete Feedback Listener
+        container.querySelectorAll('.delete-feedback-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.id;
+                if (!confirm('Are you sure you want to delete this feedback entry?')) return;
+
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                const { error } = await alumniDB.deleteFeedback(id);
+                if (error) {
+                    alert('Could not delete feedback: ' + error.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete';
+                } else {
+                    renderStudentFeedbackEntries();
+                }
+            });
+        });
     }
 
     function getTimeAgo(dateStr) {
@@ -2925,9 +2986,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const rating = parseInt(document.getElementById('sfRatingValue').value);
             if (rating === 0) { alert('Please select a rating'); return; }
 
+            const editId = studentFeedbackForm.dataset.editId;
             const submitBtn = studentFeedbackForm.querySelector('button[type="submit"]');
             const origText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
             submitBtn.disabled = true;
 
             const entry = {
@@ -2945,20 +3007,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 advice: document.getElementById('sfAdvice').value.trim()
             };
 
-            const { error } = await alumniDB.addFeedback(entry);
+            let result;
+            if (editId) {
+                result = await alumniDB.updateFeedback(editId, entry);
+            } else {
+                result = await alumniDB.addFeedback(entry);
+            }
 
             submitBtn.innerHTML = origText;
             submitBtn.disabled = false;
 
-            if (error) {
-                alert('Submission failed: ' + error.message);
+            if (result.error) {
+                alert('Operation failed: ' + result.error.message);
             } else {
-                renderStudentFeedbackEntries();
+                delete studentFeedbackForm.dataset.editId;
+                if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Feedback';
                 studentFeedbackForm.reset();
                 document.getElementById('sfRatingValue').value = '0';
                 document.getElementById('sfRatingText').textContent = 'Select Rating';
-                sfRating.querySelectorAll('.fa-star').forEach(s => s.style.color = 'var(--border-color)');
-                alert('✅ Thank you! Your feedback has been submitted successfully.');
+                if (sfRating) sfRating.querySelectorAll('.fa-star').forEach(s => s.style.color = 'var(--border-color)');
+                alert(editId ? '✅ Feedback updated successfully!' : '✅ Thank you! Your feedback has been submitted successfully.');
+                renderStudentFeedbackEntries();
             }
         });
     }
@@ -3030,8 +3099,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="community-action-btn like-btn" data-id="${post.id}" data-likes="${post.likes || 0}">
                         <i class="fas fa-heart"></i> ${post.likes || 0}
                     </button>
-                    <button class="community-action-btn">
-                        <i class="fas fa-share-alt"></i> Share
+                    <button class="community-action-btn edit-post-btn" data-id="${post.id}">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="community-action-btn delete-post-btn" data-id="${post.id}" style="color:#f43f5e">
+                        <i class="fas fa-trash-alt"></i> Delete
                     </button>
                 </div>
             </div>`;
@@ -3049,6 +3121,53 @@ document.addEventListener('DOMContentLoaded', () => {
                     const newLikes = data[0].likes;
                     btn.dataset.likes = newLikes;
                     btn.innerHTML = `<i class="fas fa-heart" style="color:#f43f5e"></i> ${newLikes}`;
+                }
+            });
+        });
+
+        // Edit Post Handler
+        container.querySelectorAll('.edit-post-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                const post = filtered.find(p => String(p.id) === String(id)) || posts.find(p => String(p.id) === String(id));
+                if (!post) return;
+
+                document.getElementById('cpCategory').value = post.category || 'feedback';
+                document.getElementById('cpTitle').value = post.title || '';
+                document.getElementById('cpContent').value = post.content || '';
+                document.getElementById('cpCompany').value = post.company || '';
+                document.getElementById('cpLocation').value = post.location || '';
+                document.getElementById('cpContactInfo').value = post.contact || '';
+
+                if (communityForm) {
+                    communityForm.dataset.editId = id;
+                    const submitBtn = communityForm.querySelector('button[type="submit"]');
+                    if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Post';
+                }
+
+                if (postForm) {
+                    postForm.classList.remove('hidden');
+                    postForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+
+        // Delete Post Handler
+        container.querySelectorAll('.delete-post-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.id;
+                if (!confirm('Are you sure you want to delete this post?')) return;
+
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                const { error } = await alumniDB.deletePost(id);
+                if (error) {
+                    alert('Could not delete post: ' + error.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete';
+                } else {
+                    renderCommunityFeed(filter);
                 }
             });
         });
@@ -3072,7 +3191,15 @@ document.addEventListener('DOMContentLoaded', () => {
         newPostBtn.addEventListener('click', () => postForm.classList.toggle('hidden'));
     }
     if (closeFormBtn && postForm) {
-        closeFormBtn.addEventListener('click', () => postForm.classList.add('hidden'));
+        closeFormBtn.addEventListener('click', () => {
+            postForm.classList.add('hidden');
+            if (communityForm) {
+                delete communityForm.dataset.editId;
+                communityForm.reset();
+                const submitBtn = communityForm.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Publish Post';
+            }
+        });
     }
 
     // Community Form Submit
@@ -3080,40 +3207,48 @@ document.addEventListener('DOMContentLoaded', () => {
     if (communityForm) {
         communityForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const user = authManager.getCurrentUser();
             
+            const editId = communityForm.dataset.editId;
             const submitBtn = communityForm.querySelector('button[type="submit"]');
             const origText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
             submitBtn.disabled = true;
 
-            const post = {
+            const postPayload = {
                 category: document.getElementById('cpCategory').value,
                 title: document.getElementById('cpTitle').value.trim(),
                 content: document.getElementById('cpContent').value.trim(),
                 company: document.getElementById('cpCompany').value.trim(),
                 location: document.getElementById('cpLocation').value.trim(),
-                contact: document.getElementById('cpContactInfo').value.trim(),
-                author: user ? user.fullName : 'Anonymous',
-                program: user ? (user.program || 'Alumni') : 'Alumni',
-                likes: 0
+                contact: document.getElementById('cpContactInfo').value.trim()
             };
 
-            const { error } = await alumniDB.addPost(post);
+            let res;
+            if (editId) {
+                res = await alumniDB.updatePost(editId, postPayload);
+            } else {
+                const user = authManager.getCurrentUser();
+                postPayload.author = user ? user.fullName : 'Anonymous';
+                postPayload.program = user ? (user.program || 'Alumni') : 'Alumni';
+                postPayload.likes = 0;
+                res = await alumniDB.addPost(postPayload);
+            }
             
             submitBtn.innerHTML = origText;
             submitBtn.disabled = false;
 
-            if (error) {
-                alert('Posting failed: ' + error.message);
+            if (res.error) {
+                alert('Operation failed: ' + res.error.message);
             } else {
-                renderCommunityFeed('all');
+                delete communityForm.dataset.editId;
+                if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Publish Post';
                 communityForm.reset();
                 postForm.classList.add('hidden');
                 // Reset filter buttons
                 document.querySelectorAll('.community-filter-btn').forEach(b => b.classList.remove('active'));
                 document.querySelector('.community-filter-btn[data-filter="all"]')?.classList.add('active');
-                alert('✅ Your post has been published to the community!');
+                alert(editId ? '✅ Your post has been updated!' : '✅ Your post has been published to the community!');
+                renderCommunityFeed('all');
             }
         });
     }
